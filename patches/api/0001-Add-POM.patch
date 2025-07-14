@@ -1,0 +1,313 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Sat, 12 Jul 2025 17:37:14 +0800
+Subject: [PATCH] Add POM
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+deleted file mode 100644
+index 462d7e12d9f38d32e4aa0c9e222d390ee49ebb39..0000000000000000000000000000000000000000
+--- a/build.gradle.kts
++++ /dev/null
+@@ -1,125 +0,0 @@
+-plugins {
+-    id("pandaspigot.conventions")
+-    `maven-publish`
+-}
+-
+-java {
+-    withSourcesJar()
+-    withJavadocJar()
+-}
+-
+-dependencies {
+-    api("commons-lang:commons-lang:2.6")
+-    api("org.avaje:ebean:2.8.1")
+-    api("com.googlecode.json-simple:json-simple:1.1.1") {
+-        isTransitive = false
+-    }
+-    api("org.yaml:snakeyaml:1.15")
+-    api("net.md-5:bungeecord-chat:1.8-SNAPSHOT")
+-    compileOnlyApi("net.sf.trove4j:trove4j:3.0.3") // provided by server
+-
+-    // bundled with Minecraft, should be kept in sync
+-    api("com.google.guava:guava:17.0")
+-    api("com.google.code.gson:gson:2.2.4")
+-    api("org.slf4j:slf4j-api:1.7.35") // PandaSpigot - Add SLF4J Logger
+-
+-    // testing
+-    testImplementation("junit:junit:4.12")
+-    testImplementation("org.hamcrest:hamcrest-library:1.3")
+-    testImplementation("net.sf.trove4j:trove4j:3.0.3") // required by tests
+-}
+-
+-tasks {
+-    val generateApiVersioningFile by registering {
+-        inputs.property("version", project.version)
+-        val pomProps = layout.buildDirectory.file("pom.properties")
+-        outputs.file(pomProps)
+-        doLast {
+-            pomProps.get().asFile.writeText("version=${project.version}")
+-        }
+-    }
+-
+-    jar {
+-        from(generateApiVersioningFile.map { it.outputs.files.singleFile }) {
+-            into("META-INF/maven/${project.group}/${project.name.lowercase()}")
+-        }
+-
+-        manifest {
+-            attributes(
+-                "Automatic-Module-Name" to "org.bukkit"
+-            )
+-        }
+-    }
+-
+-    withType<Javadoc> {
+-        (options as StandardJavadocDocletOptions).let {
+-            // hide warnings
+-            it.addBooleanOption("Xdoclint:none", true)
+-            it.addStringOption("Xmaxwarns", "1")
+-
+-            it.links(
+-                "https://guava.dev/releases/17.0/api/docs/",
+-                "https://javadoc.io/doc/org.yaml/snakeyaml/1.15/",
+-                "https://javadoc.io/doc/net.md-5/bungeecord-chat/1.16-R0.4/",
+-            )
+-        }
+-    }
+-}
+-
+-publishing {
+-    publications {
+-        create<MavenPublication>("mavenJava") {
+-            from(components["java"])
+-            versionMapping {
+-                usage("java-api") {
+-                    fromResolutionOf("runtimeClasspath")
+-                }
+-            }
+-
+-            pom {
+-                url.set("https://github.com/hpfxd/PandaSpigot")
+-                description.set(project.description)
+-                name.set(project.name)
+-                // if this is a CI build, set version as the run id
+-                System.getenv("GITHUB_RUN_NUMBER").let { if (it != null) version = it }
+-
+-                developers {
+-                    developer {
+-                        id.set("hpfxd")
+-                        name.set("Nate")
+-                        email.set("me@hpfxd.com")
+-                    }
+-                }
+-
+-                scm {
+-                    connection.set("scm:git:git://github.com/hpfxd/PandaSpigot.git")
+-                    developerConnection.set("scm:git:git://github.com/hpfxd/PandaSpigot.git")
+-                    url.set("https://github.com/hpfxd/PandaSpigot")
+-                }
+-
+-                licenses {
+-                    license {
+-                        name.set("GPL-v3.0")
+-                        url.set("https://www.gnu.org/licenses/gpl-3.0.txt")
+-                    }
+-                }
+-            }
+-        }
+-    }
+-
+-    (System.getenv("REPO_USERNAME") ?: findProperty("repository.hpfxd.username")).let { repoUsername ->
+-        if (repoUsername == null) return@let // don't declare repository if username not declared
+-
+-        repositories {
+-            maven {
+-                name = "hpfxd-repo"
+-                url = uri("https://repo.hpfxd.com/releases/")
+-
+-                credentials {
+-                    username = repoUsername as String
+-                    password = System.getenv("REPO_PASSWORD") ?: findProperty("repository.hpfxd.password") as String
+-                }
+-            }
+-        }
+-    }
+-}
+diff --git a/pom.xml b/pom.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000..65c42ff1737671cd88ce5558a3aac8b858744042
+--- /dev/null
++++ b/pom.xml
+@@ -0,0 +1,170 @@
++
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
++    <modelVersion>4.0.0</modelVersion>
++
++    <parent>
++        <groupId>colosseum.minecraft</groupId>
++        <artifactId>colosseumspigot-parent</artifactId>
++        <version>dev-SNAPSHOT</version>
++    </parent>
++
++    <name>ColosseumSpigot-API</name>
++    <artifactId>colosseumspigot-api</artifactId>
++    <version>1.8.8-R0.1-SNAPSHOT</version>
++    <packaging>jar</packaging>
++
++    <repositories>
++        <repository>
++            <id>sonatype</id>
++            <url>https://oss.sonatype.org/content/repositories/releases/</url>
++        </repository>
++        <repository>
++            <id>hpfxd-repo</id>
++            <url>https://repo.hpfxd.com/releases/</url>
++        </repository>
++    </repositories>
++
++    <properties>
++        <maven.compiler.source>17</maven.compiler.source>
++        <maven.compiler.target>17</maven.compiler.target>
++        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
++    </properties>
++
++    <dependencies>
++        <dependency>
++            <groupId>net.sf.trove4j</groupId>
++            <artifactId>trove4j</artifactId>
++            <version>3.0.3</version>
++            <!-- Trove Provided by CraftBukkit -->
++            <scope>provided</scope>
++        </dependency>
++        <dependency>
++            <groupId>commons-lang</groupId>
++            <artifactId>commons-lang</artifactId>
++            <version>2.6</version>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>com.googlecode.json-simple</groupId>
++            <artifactId>json-simple</artifactId>
++            <version>1.1.1</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++        <!-- bundled with Minecraft, should be kept in sync -->
++        <dependency>
++            <groupId>com.google.guava</groupId>
++            <artifactId>guava</artifactId>
++            <version>17.0</version>
++            <scope>compile</scope>
++        </dependency>
++        <!-- bundled with Minecraft, should be kept in sync -->
++        <dependency>
++            <groupId>com.google.code.gson</groupId>
++            <artifactId>gson</artifactId>
++            <version>2.2.4</version>
++        </dependency>
++        <dependency>
++            <groupId>org.avaje</groupId>
++            <artifactId>ebean</artifactId>
++            <version>2.8.1</version>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.yaml</groupId>
++            <artifactId>snakeyaml</artifactId>
++            <version>1.15</version>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.slf4j</groupId>
++            <artifactId>slf4j-api</artifactId>
++            <version>1.7.35</version>
++        </dependency>
++        <dependency>
++            <groupId>net.md-5</groupId>
++            <artifactId>bungeecord-chat</artifactId>
++            <version>1.8-SNAPSHOT</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++
++        <dependency>
++            <groupId>junit</groupId>
++            <artifactId>junit</artifactId>
++            <version>4.12</version>
++            <scope>test</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.hamcrest</groupId>
++            <artifactId>hamcrest-library</artifactId>
++            <version>1.3</version>
++            <scope>test</scope>
++        </dependency>
++    </dependencies>
++
++    <build>
++        <plugins>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-compiler-plugin</artifactId>
++                <version>3.14.0</version>
++                <configuration>
++                    <source>${maven.compiler.source}</source>
++                    <target>${maven.compiler.target}</target>
++                </configuration>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-source-plugin</artifactId>
++                <version>3.3.1</version>
++                <executions>
++                    <execution>
++                        <id>attach-sources</id>
++                        <phase>verify</phase>
++                        <goals>
++                            <goal>jar</goal>
++                        </goals>
++                    </execution>
++                </executions>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-javadoc-plugin</artifactId>
++                <version>3.11.2</version>
++                <executions>
++                    <execution>
++                        <id>attach-javadocs</id>
++                        <phase>verify</phase>
++                        <goals>
++                            <goal>jar</goal>
++                        </goals>
++                    </execution>
++                </executions>
++                <configuration>
++                    <doclint>none</doclint>
++                    <links>
++                        <link>https://guava.dev/releases/17.0/api/docs/</link>
++                        <link>https://javadoc.io/doc/org.yaml/snakeyaml/1.15/</link>
++                        <link>https://javadoc.io/doc/net.md-5/bungeecord-chat/1.16-R0.4/</link>
++                    </links>
++                </configuration>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-jar-plugin</artifactId>
++                <version>3.4.2</version>
++                <configuration>
++                    <finalName>${project.name}-${project.version}</finalName>
++                    <archive>
++                        <manifestEntries>
++                            <Automatic-Module-Name>org.bukkit</Automatic-Module-Name>
++                            <Built-By></Built-By>
++                        </manifestEntries>
++                    </archive>
++                </configuration>
++            </plugin>
++        </plugins>
++    </build>
++</project>

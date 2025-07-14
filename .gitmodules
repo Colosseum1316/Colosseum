@@ -1,0 +1,12 @@
+[submodule "Panda"]
+	path = Panda
+	url = https://github.com/hpfxd/PandaSpigot.git
+	branch = master
+[submodule "SpecialSource"]
+	path = SpecialSource
+	url = https://github.com/md-5/SpecialSource.git
+	branch = master
+[submodule "SpecialSource2"]
+	path = SpecialSource2
+	url = https://github.com/NetherRealmSpigot/SpecialSource-2.git
+	branch = master

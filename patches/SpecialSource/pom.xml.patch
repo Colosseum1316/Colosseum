@@ -1,0 +1,67 @@
+--- pom.xml	2025-07-16 02:20:37.668596314 +0800
++++ pom.xml	2025-07-16 02:20:45.281785134 +0800
+@@ -36,8 +36,8 @@
+     </issueManagement>
+ 
+     <properties>
+-        <maven.compiler.source>1.7</maven.compiler.source>
+-        <maven.compiler.target>1.7</maven.compiler.target>
++        <maven.compiler.source>17</maven.compiler.source>
++        <maven.compiler.target>17</maven.compiler.target>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     </properties>
+ 
+@@ -51,7 +51,7 @@
+         <dependency>
+             <groupId>org.projectlombok</groupId>
+             <artifactId>lombok</artifactId>
+-            <version>1.18.20</version>
++            <version>1.18.38</version>
+             <scope>provided</scope>
+         </dependency>
+         <dependency>
+@@ -98,12 +98,23 @@
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-compiler-plugin</artifactId>
++                <version>3.14.0</version>
++                <configuration>
++                    <source>${maven.compiler.source}</source>
++                    <target>${maven.compiler.target}</target>
++                </configuration>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-jar-plugin</artifactId>
+-                <version>3.1.0</version>
++                <version>3.4.2</version>
+                 <configuration>
++                    <finalName>${project.name}</finalName>
+                     <archive>
+                         <manifestEntries>
+                             <Main-Class>net.md_5.specialsource.SpecialSource</Main-Class>
++                            <Built-By></Built-By>
+                         </manifestEntries>
+                     </archive>
+                 </configuration>
+@@ -111,7 +122,7 @@
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-shade-plugin</artifactId>
+-                <version>3.1.1</version>
++                <version>3.6.0</version>
+                 <executions>
+                     <execution>
+                         <phase>package</phase>
+@@ -121,8 +132,8 @@
+                     </execution>
+                 </executions>
+                 <configuration>
+-                    <minimizeJar>true</minimizeJar>
+-                    <shadedArtifactAttached>true</shadedArtifactAttached>
++                    <minimizeJar>false</minimizeJar>
++                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                 </configuration>
+             </plugin>
+             <plugin>

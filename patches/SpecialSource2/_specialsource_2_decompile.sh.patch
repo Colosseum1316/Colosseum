@@ -1,0 +1,14 @@
+--- _specialsource_2_decompile.sh	2025-07-17 15:59:08.816890228 +0800
++++ _specialsource_2_decompile.sh	2025-07-17 16:00:43.357559437 +0800
+@@ -13,9 +13,9 @@
+ rm -rf "${decompilation_dir}"
+ mkdir -p "${decompilation_dir}"
+ java -version
+-java -jar "${WORKING_DIR}/Panda/base/Paper/BuildData/bin/fernflower.jar" -den=1 -dgs=1 -hdc=0 -rbr=0 -asc=1 -udv=0 "${WORKING_DIR}/Panda/bin/SpecialSource-2.jar" "${decompilation_dir}"
++java -jar "${WORKING_DIR}/Panda/base/Paper/BuildData/bin/fernflower.jar" -log=WARN -den=1 -dgs=1 -hdc=0 -rbr=0 -asc=1 -udv=0 "${WORKING_DIR}/Panda/bin/SpecialSource-2.jar" "${decompilation_dir}"
+ cd "${decompilation_dir}"
+-jar xvf SpecialSource-2.jar
++jar xf SpecialSource-2.jar
+ rm -rf SpecialSource-2.jar
+ rm -rf com
+ rm -rf joptsimple

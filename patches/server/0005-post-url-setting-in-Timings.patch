@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Thu, 17 Jul 2025 18:01:49 +0800
+Subject: [PATCH] post-url setting in Timings
+
+
+diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
+index 34333b1603ef2dec8d4403d617e14515aa5770de..8e4cd53f82dbd72e6ba6d45d93ba66e3b9e5720b 100644
+--- a/src/main/java/org/spigotmc/SpigotConfig.java
++++ b/src/main/java/org/spigotmc/SpigotConfig.java
+@@ -239,9 +239,10 @@ public class SpigotConfig
+ 
+     private static void timings()
+     {
+-        boolean timings = getBoolean( "timings.enabled", true );
++        boolean timings = getBoolean( "timings.enabled", false );  // ColosseumSpigot
++        String postUrl = getString("timings.post-url", "http://timings.aikar.co/post");  // ColosseumSpigot
+         boolean verboseTimings = getBoolean( "timings.verbose", true );
+-        TimingsManager.privacy = getBoolean( "timings.server-name-privacy", false );
++        TimingsManager.privacy = getBoolean( "timings.server-name-privacy", true );  // ColosseumSpigot
+         TimingsManager.hiddenConfigs = getList( "timings.hidden-config-entries", Lists.newArrayList("database", "settings.bungeecord-addresses"));
+         int timingHistoryInterval = getInt( "timings.history-interval", 300 );
+         int timingHistoryLength = getInt( "timings.history-length", 3600 );
+@@ -249,9 +250,20 @@ public class SpigotConfig
+ 
+         Timings.setVerboseTimingsEnabled( verboseTimings );
+         Timings.setTimingsEnabled( timings );
++        Timings.setPostUrl( postUrl );  // ColosseumSpigot
+         Timings.setHistoryInterval( timingHistoryInterval * 20 );
+         Timings.setHistoryLength( timingHistoryLength * 20 );
+ 
++        // ColosseumSpigot start
++        if (timings) {
++            Bukkit.getLogger().log(Level.WARNING, "You have timings enabled!!!");
++            Bukkit.getLogger().log(Level.WARNING, "Attention! You have timings enabled! For best privacy, you should only use a server that's trustworthy!!! Or use your own server! It's open source at https://github.com/aikar/timings");
++            if (!TimingsManager.privacy) {
++                Bukkit.getLogger().log(Level.WARNING, "Attention! You have timings enabled! Timings report will include server name, motd, online mode status and server icon! Sensitive information may be leaked to untrusted entity!");
++            }
++        }
++        // ColosseumSpigot end
++
+         Bukkit.getLogger().log( Level.INFO, "Spigot Timings: " + timings +
+             " - Verbose: " + verboseTimings +
+             " - Interval: " + timeSummary(Timings.getHistoryInterval() / 20) +

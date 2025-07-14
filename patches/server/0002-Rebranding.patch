@@ -1,0 +1,86 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Thu, 17 Jul 2025 18:45:50 +0800
+Subject: [PATCH] Rebranding
+
+
+diff --git a/src/main/java/com/hpfxd/pandaspigot/console/PandaConsole.java b/src/main/java/com/hpfxd/pandaspigot/console/PandaConsole.java
+index 25a515b681bbbb70946f2ec73647a6f184f81b3c..776cdc4c217660ba3e42faf9783c5c599f289857 100644
+--- a/src/main/java/com/hpfxd/pandaspigot/console/PandaConsole.java
++++ b/src/main/java/com/hpfxd/pandaspigot/console/PandaConsole.java
+@@ -32,7 +32,7 @@ public class PandaConsole extends SimpleTerminalConsole {
+     @Override
+     protected LineReader buildReader(LineReaderBuilder builder) {
+         return super.buildReader(builder
+-            .appName("PandaSpigot")
++            .appName("ColosseumSpigot")
+             .variable(LineReader.HISTORY_FILE, Paths.get(".console_history"))
+             .completer(new PandaConsoleCompleter(this.server)));
+     }
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index ddc201207d3ec6ca278de6b3bcacebc2d258dad6..6bc951d274faf94891057d6d97b930fd6dc0f89b 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -44,6 +44,7 @@ import java.io.IOException;
+ //import jline.console.ConsoleReader; // PandaSpigot - comment out
+ import joptsimple.OptionSet;
+ 
++import org.bukkit.Bukkit;
+ import org.bukkit.craftbukkit.Main;
+ import co.aikar.timings.SpigotTimings; // Spigot
+ // CraftBukkit end
+@@ -1169,7 +1170,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+     }
+ 
+     public String getServerModName() {
+-        return "PandaSpigot"; // PandaSpigot - PandaSpigot > // PaperSpigot - PaperSpigot > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
++        return Bukkit.getVersion(); // ColosseumSpigot > // PandaSpigot - PandaSpigot > // PaperSpigot - PaperSpigot > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
+     }
+ 
+     public CrashReport b(CrashReport crashreport) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 0c6cdfed088a26380e6fe7052e747efeedda7b1e..f9d292fb0b50adc56f651c9f1fc7cfe23576c145 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -127,7 +127,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
+ 
+ public final class CraftServer implements Server {
+     private static final Player[] EMPTY_PLAYER_ARRAY = new Player[0];
+-    private final String serverName = "PandaSpigot"; // PandaSpigot
++    private final String serverName = "Colosseum"; // ColosseumSpigot
+     private final String serverVersion;
+     private final String bukkitVersion = Versioning.getBukkitVersion();
+     private final Logger logger = Logger.getLogger("Minecraft");
+diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
+index 879e29592d9f6c4be7bd5d5dfbf83be1eb732799..fb96e99795469ed549f059110c3e2d559eebe8c8 100644
+--- a/src/main/java/org/spigotmc/WatchdogThread.java
++++ b/src/main/java/org/spigotmc/WatchdogThread.java
+@@ -19,7 +19,7 @@ public class WatchdogThread extends Thread
+ 
+     private WatchdogThread(long timeoutTime, boolean restart)
+     {
+-        super( "PandaSpigot Watchdog Thread" ); // PandaSpigot
++        super( "ColosseumSpigot Watchdog Thread" ); // ColosseumSpigot
+         this.timeoutTime = timeoutTime;
+         this.restart = restart;
+     }
+@@ -56,9 +56,8 @@ public class WatchdogThread extends Thread
+             {
+                 Logger log = Bukkit.getServer().getLogger();
+                 log.log( Level.SEVERE, "The server has stopped responding!" );
+-                log.log( Level.SEVERE, "Please report this in https://github.com/hpfxd/PandaSpigot/issues!" ); // PandaSpigot
+                 log.log( Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports" );
+-                log.log( Level.SEVERE, "PandaSpigot version: " + Bukkit.getServer().getVersion() ); // PandaSpigot
++                log.log( Level.SEVERE, "Server version: " + Bukkit.getServer().getVersion() ); // ColosseumSpigot
+                 //
+                 if(net.minecraft.server.World.haveWeSilencedAPhysicsCrash)
+                 {
+@@ -68,7 +67,7 @@ public class WatchdogThread extends Thread
+                 }
+                 //
+                 log.log( Level.SEVERE, "------------------------------" );
+-                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to PandaSpigot!):" ); // PandaSpigot
++                log.log( Level.SEVERE, "Server thread dump:" ); // ColosseumSpigot
+                 dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( MinecraftServer.getServer().primaryThread.getId(), Integer.MAX_VALUE ), log );
+                 log.log( Level.SEVERE, "------------------------------" );
+                 //

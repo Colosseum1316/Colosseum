@@ -1,0 +1,501 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Sat, 12 Jul 2025 17:37:05 +0800
+Subject: [PATCH] Add POM
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+deleted file mode 100644
+index 83dcd2285e088f8620831e20893c44a122779daf..0000000000000000000000000000000000000000
+--- a/build.gradle.kts
++++ /dev/null
+@@ -1,152 +0,0 @@
+-plugins {
+-    id("pandaspigot.conventions")
+-    id("com.gradleup.shadow") version "9.0.0-beta7"
+-}
+-
+-val minecraftVersion = "1_8_R3"
+-
+-repositories {
+-    maven(url = "https://libraries.minecraft.net")
+-}
+-
+-dependencies {
+-    implementation(project(":pandaspigot-api"))
+-
+-    // PandaSpigot start - Configuration
+-    implementation("com.hpfxd.configurate:configurate-eo-yaml:1.0.0") {
+-        exclude(group = "org.checkerframework", module = "checker-qual")
+-    }
+-    // PandaSpigot end
+-
+-    // Minecraft libraries:
+-    implementation("io.netty:netty-all:4.1.121.Final") // PandaSpigot - Update Netty to 4.1.x
+-    implementation("com.mojang:authlib:1.5.21")
+-    // PandaSpigot start - Update log4j
+-    implementation("org.apache.logging.log4j:log4j-api:2.24.3")
+-    implementation("org.apache.logging.log4j:log4j-core:2.24.3")
+-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.24.3") // PandaSpigot - Add SLF4J logger
+-    implementation("org.apache.logging.log4j:log4j-iostreams:2.24.3") // PandaSpigot - Add Log4j IOStreams
+-    // PandaSpigot end
+-    implementation("org.apache.commons:commons-lang3:3.3.2")
+-    implementation("commons-io:commons-io:2.4")
+-    implementation("commons-codec:commons-codec:1.9")
+-    implementation("com.google.guava:guava:17.0")
+-    implementation("com.google.code.gson:gson:2.2.4")
+-    implementation("net.sf.trove4j:trove4j:3.0.3")
+-    implementation("net.sf.jopt-simple:jopt-simple:3.2")
+-
+-    implementation("org.xerial:sqlite-jdbc:3.7.2")
+-    implementation("mysql:mysql-connector-java:5.1.14")
+-
+-    // PandaSpigot start - Use TerminalConsoleAppender
+-    implementation("net.minecrell:terminalconsoleappender:1.3.0")
+-    implementation("org.jline:jline-terminal-jni:3.30.3")
+-    // PandaSpigot end
+-
+-    implementation("net.kyori:adventure-key:4.21.0") // PandaSpigot - Add Channel initialization listeners
+-
+-    testImplementation("junit:junit:4.11")
+-    testImplementation("org.hamcrest:hamcrest-library:1.3")
+-}
+-
+-fun TaskContainer.registerRunTask(
+-    name: String, block: JavaExec.() -> Unit
+-): TaskProvider<JavaExec> = register<JavaExec>(name) {
+-    group = "pandaspigot"
+-    standardInput = System.`in`
+-    workingDir = rootProject.layout.projectDirectory.dir(
+-        providers.gradleProperty("runWorkDir").orElse("run")
+-    ).get().asFile
+-
+-    doFirst {
+-        workingDir.mkdirs()
+-    }
+-    block(this)
+-}
+-
+-tasks {
+-    shadowJar {
+-        mergeServiceFiles()
+-        archiveClassifier.set("unmapped")
+-        append("META-INF/io.netty.versions.properties")
+-        transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer()) // PandaSpigot - Use TerminalConsoleAppender
+-        // PandaSpigot start - Configuration
+-        arrayOf(
+-            "com.amihaiemil.eoyaml",
+-            "org.spongepowered.configurate",
+-            "io.leangen.geantyref",
+-        ).forEach { relocate(it, "com.hpfxd.pandaspigot.libs.$it") }
+-        // PandaSpigot end
+-
+-        val cbLibsPkg = "org.bukkit.craftbukkit.libs"
+-
+-        relocate("joptsimple", "$cbLibsPkg.joptsimple")
+-        relocate("org.ibex", "$cbLibsPkg.org.ibex")
+-        relocate("org.gjt", "$cbLibsPkg.org.gjt")
+-
+-        relocate("org.bukkit.craftbukkit", "org.bukkit.craftbukkit.v${minecraftVersion}") {
+-            exclude("org.bukkit.craftbukkit.Main*") // don't relocate main class
+-        }
+-        relocate("net.minecraft.server", "net.minecraft.server.v${minecraftVersion}")
+-    }
+-
+-    named("build") {
+-        dependsOn(named("shadowJar"))
+-    }
+-
+-    test {
+-        exclude("org/bukkit/craftbukkit/inventory/ItemStack*Test.class", "org/bukkit/craftbukkit/inventory/ItemFactoryTest.class")
+-    }
+-
+-    jar {
+-        archiveClassifier.set("original")
+-        manifest {
+-            val git = Git(rootProject.layout.projectDirectory)
+-            val gitHash = git("rev-parse", "--short=7", "HEAD").getText().trim()
+-            val implementationVersion = System.getenv("GITHUB_RUN_NUMBER") ?: "\"$gitHash\""
+-            val date = git("show", "-s", "--format=%ci", gitHash).getText().trim()
+-            val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim()
+-            attributes(
+-                "Main-Class" to "org.bukkit.craftbukkit.Main",
+-                "Implementation-Title" to "CraftBukkit",
+-                "Implementation-Version" to "git-PandaSpigot-$implementationVersion",
+-                "Implementation-Vendor" to date,
+-                "Specification-Title" to "Bukkit",
+-                "Specification-Version" to project.version,
+-                "Specification-Vendor" to "Bukkit Team",
+-                "Multi-Release" to "true", // PandaSpigot
+-                "Git-Branch" to gitBranch,
+-                "Git-Commit" to gitHash,
+-            )
+-        }
+-    }
+-
+-    registerRunTask("runShadow") {
+-        description = "Spin up a test server from the shadowJar archiveFile"
+-        classpath(shadowJar.flatMap { it.archiveFile })
+-    }
+-
+-    registerRunTask("runDev") {
+-        description = "Spin up a non-shaded non-relocated test server"
+-        classpath = java.sourceSets.main.get().runtimeClasspath
+-        mainClass.set("org.bukkit.craftbukkit.Main")
+-    }
+-
+-    register<RemapTask>("remap") {
+-        description = "Remap the output JAR file using the deprecation mappings"
+-
+-        val inTask = shadowJar.get()
+-        inJarFile.set(inTask.archiveFile)
+-        outJarFile.set(inTask.destinationDirectory.map { dir ->
+-            val archiveName = ArchiveName.archiveNameFromTask(inTask).copy(classifier = "")
+-            dir.file(archiveName.toFileName())
+-        })
+-
+-        mappingFile.set(project.layout.projectDirectory.file("deprecation-mappings.csrg"))
+-        accessTransformerFile.set(project.layout.projectDirectory.file("deprecation-mappings.at"))
+-    }
+-
+-    assemble {
+-        dependsOn(named("remap"))
+-    }
+-}
+diff --git a/pom.xml b/pom.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000..052789c94359e5066d5b933a14183c4ed5322e1d
+--- /dev/null
++++ b/pom.xml
+@@ -0,0 +1,330 @@
++
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
++    <modelVersion>4.0.0</modelVersion>
++
++    <parent>
++        <groupId>colosseum.minecraft</groupId>
++        <artifactId>colosseumspigot-parent</artifactId>
++        <version>dev-SNAPSHOT</version>
++    </parent>
++
++    <name>ColosseumSpigot</name>
++    <artifactId>colosseumspigot</artifactId>
++    <version>1.8.8-R0.1-SNAPSHOT</version>
++    <packaging>jar</packaging>
++
++    <properties>
++        <nms.version>1_8_R3</nms.version>
++        <log4j.version>2.24.3</log4j.version>
++        <maven.compiler.source>17</maven.compiler.source>
++        <maven.compiler.target>17</maven.compiler.target>
++        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
++    </properties>
++
++    <repositories>
++        <repository>
++            <id>sonatype</id>
++            <url>https://oss.sonatype.org/content/repositories/releases/</url>
++        </repository>
++        <repository>
++            <id>hpfxd-repo</id>
++            <url>https://repo.hpfxd.com/releases/</url>
++        </repository>
++    </repositories>
++
++    <dependencies>
++        <dependency>
++            <groupId>${project.groupId}</groupId>
++            <artifactId>colosseumspigot-api</artifactId>
++            <version>${project.version}</version>
++        </dependency>
++        <dependency>
++            <groupId>com.hpfxd.configurate</groupId>
++            <artifactId>configurate-eo-yaml</artifactId>
++            <version>1.0.0</version>
++            <exclusions>
++                <exclusion>
++                    <groupId>org.checkerframework</groupId>
++                    <artifactId>checker-qual</artifactId>
++                </exclusion>
++            </exclusions>
++        </dependency>
++        <dependency>
++            <groupId>io.netty</groupId>
++            <artifactId>netty-all</artifactId>
++            <version>4.1.121.Final</version>
++        </dependency>
++        <dependency>
++            <groupId>com.mojang</groupId>
++            <artifactId>authlib</artifactId>
++            <version>1.5.21</version>
++        </dependency>
++        <dependency>
++            <groupId>org.apache.logging.log4j</groupId>
++            <artifactId>log4j-api</artifactId>
++            <version>${log4j.version}</version>
++        </dependency>
++        <dependency>
++            <groupId>org.apache.logging.log4j</groupId>
++            <artifactId>log4j-core</artifactId>
++            <version>${log4j.version}</version>
++        </dependency>
++        <dependency>
++            <groupId>org.apache.logging.log4j</groupId>
++            <artifactId>log4j-slf4j-impl</artifactId>
++            <version>${log4j.version}</version>
++        </dependency>
++        <dependency>
++            <groupId>org.apache.logging.log4j</groupId>
++            <artifactId>log4j-iostreams</artifactId>
++            <version>${log4j.version}</version>
++        </dependency>
++        <dependency>
++            <groupId>org.apache.commons</groupId>
++            <artifactId>commons-lang3</artifactId>
++            <version>3.3.2</version>
++        </dependency>
++        <dependency>
++            <groupId>commons-io</groupId>
++            <artifactId>commons-io</artifactId>
++            <version>2.4</version>
++        </dependency>
++        <dependency>
++            <groupId>commons-codec</groupId>
++            <artifactId>commons-codec</artifactId>
++            <version>1.9</version>
++        </dependency>
++        <dependency>
++            <groupId>com.google.guava</groupId>
++            <artifactId>guava</artifactId>
++            <version>17.0</version>
++        </dependency>
++        <dependency>
++            <groupId>com.google.code.gson</groupId>
++            <artifactId>gson</artifactId>
++            <version>2.2.4</version>
++        </dependency>
++        <dependency>
++            <groupId>net.sf.trove4j</groupId>
++            <artifactId>trove4j</artifactId>
++            <version>3.0.3</version>
++        </dependency>
++        <dependency>
++            <groupId>net.sf.jopt-simple</groupId>
++            <artifactId>jopt-simple</artifactId>
++            <version>3.2</version>
++        </dependency>
++        <dependency>
++            <groupId>org.xerial</groupId>
++            <artifactId>sqlite-jdbc</artifactId>
++            <version>3.7.2</version>
++        </dependency>
++        <dependency>
++            <groupId>mysql</groupId>
++            <artifactId>mysql-connector-java</artifactId>
++            <version>5.1.14</version>
++        </dependency>
++        <dependency>
++            <groupId>net.minecrell</groupId>
++            <artifactId>terminalconsoleappender</artifactId>
++            <version>1.3.0</version>
++        </dependency>
++        <dependency>
++            <groupId>org.jline</groupId>
++            <artifactId>jline-terminal-jni</artifactId>
++            <version>3.30.3</version>
++        </dependency>
++        <dependency>
++            <groupId>net.kyori</groupId>
++            <artifactId>adventure-key</artifactId>
++            <version>4.21.0</version>
++        </dependency>
++
++        <dependency>
++            <groupId>junit</groupId>
++            <artifactId>junit</artifactId>
++            <version>4.11</version>
++            <scope>test</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.hamcrest</groupId>
++            <artifactId>hamcrest-library</artifactId>
++            <version>1.3</version>
++            <scope>test</scope>
++        </dependency>
++    </dependencies>
++
++    <build>
++        <defaultGoal>install</defaultGoal>
++        <plugins>
++            <plugin>
++                <groupId>net.md-5</groupId>
++                <artifactId>scriptus</artifactId>
++                <version>0.5.0</version>
++                <executions>
++                    <execution>
++                        <phase>initialize</phase>
++                        <goals>
++                            <goal>describe</goal>
++                        </goals>
++                    </execution>
++                </executions>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-compiler-plugin</artifactId>
++                <version>3.14.0</version>
++                <configuration>
++                    <source>${maven.compiler.source}</source>
++                    <target>${maven.compiler.target}</target>
++                </configuration>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-jar-plugin</artifactId>
++                <version>3.4.2</version>
++                <configuration>
++                    <finalName>${project.name}-${project.version}</finalName>
++                    <archive>
++                        <manifestEntries>
++                            <Main-Class>org.bukkit.craftbukkit.Main</Main-Class>
++                            <Implementation-Title>CraftBukkit</Implementation-Title>
++                            <Implementation-Version>${describe}</Implementation-Version>
++                            <Implementation-Vendor>Colosseum</Implementation-Vendor>
++                            <Specification-Title>Colosseum</Specification-Title>
++                            <Specification-Version>${project.version}</Specification-Version>
++                            <Specification-Vendor>Colosseum</Specification-Vendor>
++                            <Multi-Release>true</Multi-Release>
++                            <Built-By></Built-By>
++                        </manifestEntries>
++                        <manifestSections>
++                            <manifestSection>
++                                <name>net/bukkit/</name>
++                                <manifestEntries>
++                                    <Sealed>true</Sealed>
++                                </manifestEntries>
++                            </manifestSection>
++                            <manifestSection>
++                                <name>com/bukkit/</name>
++                                <manifestEntries>
++                                    <Sealed>true</Sealed>
++                                </manifestEntries>
++                            </manifestSection>
++                            <manifestSection>
++                                <name>org/bukkit/</name>
++                                <manifestEntries>
++                                    <Sealed>true</Sealed>
++                                </manifestEntries>
++                            </manifestSection>
++                        </manifestSections>
++                    </archive>
++                </configuration>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-shade-plugin</artifactId>
++                <version>3.6.0</version>
++                <dependencies>
++                    <dependency>
++                        <groupId>org.apache.logging.log4j</groupId>
++                        <artifactId>log4j-transform-maven-shade-plugin-extensions</artifactId>
++                        <version>0.2.0</version>
++                    </dependency>
++                </dependencies>
++                <executions>
++                    <execution>
++                        <phase>package</phase>
++                        <goals>
++                            <goal>shade</goal>
++                        </goals>
++                        <configuration>
++                            <finalName>${project.artifactId}-${project.version}-unmapped</finalName>
++                            <artifactSet>
++                                <excludes>
++                                    <exclude>org.jetbrains:annotations</exclude>
++                                    <exclude>com.google.errorprone:error_prone_annotations</exclude>
++                                    <exclude>javax.persistence:persistence-api</exclude>
++                                </excludes>
++                            </artifactSet>
++                            <transformers>
++                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
++                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
++                                    <resource>META-INF/io.netty.versions.properties</resource>
++                                </transformer>
++                                <transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer"/>
++                            </transformers>
++                            <relocations>
++                                <relocation>
++                                    <pattern>com.amihaiemil.eoyaml</pattern>
++                                    <shadedPattern>com.hpfxd.pandaspigot.libs.com.amihaiemil.eoyaml</shadedPattern>
++                                </relocation>
++                                <relocation>
++                                    <pattern>org.spongepowered.configurate</pattern>
++                                    <shadedPattern>com.hpfxd.pandaspigot.libs.org.spongepowered.configurate</shadedPattern>
++                                </relocation>
++                                <relocation>
++                                    <pattern>io.leangen.geantyref</pattern>
++                                    <shadedPattern>com.hpfxd.pandaspigot.libs.io.leangen.geantyref</shadedPattern>
++                                </relocation>
++                                <relocation>
++                                    <pattern>joptsimple</pattern>
++                                    <shadedPattern>org.bukkit.craftbukkit.libs.joptsimple</shadedPattern>
++                                </relocation>
++                                <relocation>
++                                    <pattern>org.ibex</pattern>
++                                    <shadedPattern>org.bukkit.craftbukkit.libs.org.ibex</shadedPattern>
++                                </relocation>
++                                <relocation>
++                                    <pattern>org.gjt</pattern>
++                                    <shadedPattern>org.bukkit.craftbukkit.libs.org.gjt</shadedPattern>
++                                </relocation>
++                                <relocation>
++                                    <pattern>org.bukkit.craftbukkit</pattern>
++                                    <shadedPattern>org.bukkit.craftbukkit.v${nms.version}</shadedPattern>
++                                    <excludes>
++                                        <exclude>org.bukkit.craftbukkit.Main*</exclude>
++                                    </excludes>
++                                </relocation>
++                                <relocation>
++                                    <pattern>net.minecraft.server</pattern>
++                                    <shadedPattern>net.minecraft.server.v${nms.version}</shadedPattern>
++                                </relocation>
++                            </relocations>
++                            <createDependencyReducedPom>false</createDependencyReducedPom>
++                        </configuration>
++                    </execution>
++                </executions>
++            </plugin>
++            <plugin>
++                <groupId>net.md-5</groupId>
++                <artifactId>specialsource-maven-plugin</artifactId>
++                <version>2.0.4</version>
++                <executions>
++                    <execution>
++                        <phase>package</phase>
++                        <goals>
++                            <goal>remap</goal>
++                        </goals>
++                        <configuration>
++                            <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-unmapped.jar</inputFile>
++                            <srgIn>${project.basedir}/deprecation-mappings.csrg</srgIn>
++                            <accessIn>${project.basedir}/deprecation-mappings.at</accessIn>
++                        </configuration>
++                    </execution>
++                </executions>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-surefire-plugin</artifactId>
++                <version>3.5.3</version>
++                <configuration>
++                    <excludes>
++                        <exclude>org/bukkit/craftbukkit/inventory/ItemStack*Test.java</exclude>
++                        <exclude>org/bukkit/craftbukkit/inventory/ItemFactoryTest.java</exclude>
++                    </excludes>
++                </configuration>
++            </plugin>
++        </plugins>
++    </build>
++</project>
+\ No newline at end of file

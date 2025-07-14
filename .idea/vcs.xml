@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ColosseumSpigot-API" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ColosseumSpigot-Server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/PandaSpigot-API" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/PandaSpigot-Server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/BuildData" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/Bukkit" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/CraftBukkit" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/PaperSpigot-API" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/PaperSpigot-Server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/Paperclip" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/Spigot-API" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Panda/base/Paper/Spigot-Server" vcs="Git" />
+  </component>
+</project>

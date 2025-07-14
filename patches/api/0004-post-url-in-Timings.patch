@@ -1,0 +1,62 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Thu, 17 Jul 2025 18:01:59 +0800
+Subject: [PATCH] post-url in Timings
+
+
+diff --git a/src/main/java/co/aikar/timings/Timings.java b/src/main/java/co/aikar/timings/Timings.java
+index 0f7be036bc528ee2371fe83512f9066608d3b3a2..3506aa4f4dfd784216b046fb717cdcde23ac2194 100644
+--- a/src/main/java/co/aikar/timings/Timings.java
++++ b/src/main/java/co/aikar/timings/Timings.java
+@@ -42,6 +42,8 @@ public final class Timings {
+     private static int historyInterval = -1;
+     private static int historyLength = -1;
+ 
++    static String postUrl = "http://timings.aikar.co/post";  // ColosseumSpigot
++
+     private Timings() {}
+ 
+     /**
+@@ -244,6 +246,16 @@ public final class Timings {
+         TimingsExport.reportTimings(sender);
+     }
+ 
++    // ColosseumSpigot start
++    public static void setPostUrl(String url) {
++        postUrl = url;
++    }
++
++    public static String getPostUrl() {
++        return postUrl;
++    }
++    // ColosseumSpigot end
++
+     /*
+     =================
+     Protected API: These are for internal use only in Bukkit/CraftBukkit
+diff --git a/src/main/java/co/aikar/timings/TimingsExport.java b/src/main/java/co/aikar/timings/TimingsExport.java
+index fe19ea003eedfe21c6400d83430d87ddba8f5f6e..e83627737c1801f06639ecfe1295cf36725fb646 100644
+--- a/src/main/java/co/aikar/timings/TimingsExport.java
++++ b/src/main/java/co/aikar/timings/TimingsExport.java
+@@ -304,7 +304,7 @@ class TimingsExport extends Thread {
+ 
+         String response = null;
+         try {
+-            HttpURLConnection con = (HttpURLConnection) new URL("http://timings.aikar.co/post").openConnection();
++            HttpURLConnection con = (HttpURLConnection) new URL(Timings.getPostUrl()).openConnection();  // ColosseumSpigot
+             con.setDoOutput(true);
+             con.setRequestProperty("User-Agent", "Spigot/" + Bukkit.getServerName() + "/" + InetAddress.getLocalHost().getHostName());
+             con.setRequestMethod("POST");
+diff --git a/src/main/java/co/aikar/timings/TimingsManager.java b/src/main/java/co/aikar/timings/TimingsManager.java
+index 67c39df8a5a339256983011fbd82edca27f030b5..edfdc8eada1101b88a2407ff0e545b6a15f79195 100644
+--- a/src/main/java/co/aikar/timings/TimingsManager.java
++++ b/src/main/java/co/aikar/timings/TimingsManager.java
+@@ -58,7 +58,7 @@ public final class TimingsManager {
+     public static final TimingHandler TIMINGS_TICK = Timings.ofSafe("Timings Tick", FULL_SERVER_TICK);
+     public static final Timing PLUGIN_GROUP_HANDLER = Timings.ofSafe("Plugins");
+     public static List<String> hiddenConfigs = new ArrayList<String>();
+-    public static boolean privacy = false;
++    public static boolean privacy = true;  // ColosseumSpigot
+ 
+     static final Collection<TimingHandler> HANDLERS = new ArrayDeque<TimingHandler>();
+     static final ArrayDeque<TimingHistory.MinuteReport> MINUTE_REPORTS = new ArrayDeque<TimingHistory.MinuteReport>();
