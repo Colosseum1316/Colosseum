@@ -51,6 +51,19 @@ index 0c6cdfed088a26380e6fe7052e747efeedda7b1e..f9d292fb0b50adc56f651c9f1fc7cfe2
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+index da66025a18b23e249ce13a8b998d24b112cb969e..764d0468e2b409649a7e54c1077ab65332d0b5e6 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+@@ -11,7 +11,7 @@ public final class Versioning {
+     public static String getBukkitVersion() {
+         String result = "Unknown-Version";
+ 
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.hpfxd.pandaspigot/pandaspigot-api/pom.properties");
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/colosseum.minecraft/colosseumspigot-api/pom.properties");
+         Properties properties = new Properties();
+ 
+         if (stream != null) {
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
 index 879e29592d9f6c4be7bd5d5dfbf83be1eb732799..fb96e99795469ed549f059110c3e2d559eebe8c8 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java

@@ -5,10 +5,18 @@ Subject: [PATCH] Rebranding
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 4ae094a9d190e23efcebd866a8ecb11ebf9167e6..e85ef54ff3b2d1171b63ad243f0f7d7ee439bb8b 100644
+index 4ae094a9d190e23efcebd866a8ecb11ebf9167e6..aa0b1d92be7efe801003ed9d08dc09bf962df463 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -85,14 +85,7 @@ public final class Bukkit {
+@@ -78,23 +78,16 @@ public final class Bukkit {
+         Bukkit.server = server;
+         server.getLogger().info(getVersionMessage()); // PandaSpigot - Use Bukkit.getVersionMessage
+     }
+-    // PandaSpigot start
++    // ColosseumSpigot start
+     /**
+      * Gets message describing the version server is running.
+      *
       * @return message describing the version server is running
       */
      public static String getVersionMessage() {
@@ -22,5 +30,8 @@ index 4ae094a9d190e23efcebd866a8ecb11ebf9167e6..e85ef54ff3b2d1171b63ad243f0f7d7e
 -        return "This server is running " + getName() + " version " + getVersion() + " (Implementing API version " + getBukkitVersion() + ") (Git: " + gitCommit + branchMsg + ")";
 +        return "This server is running " + getName() + " version " + getVersion() + " (Implementing API version " + getBukkitVersion() + ")";
      }
-     // PandaSpgiot end
+-    // PandaSpgiot end
++    // ColosseumSpigot end
  
+     /**
+      * Gets the name of this server implementation.

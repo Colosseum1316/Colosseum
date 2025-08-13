@@ -1,0 +1,8 @@
+--- _specialsource_2_patch.sh	2025-08-12 22:01:56.059882695 +0800
++++ _specialsource_2_patch.sh	2025-08-13 01:51:34.828011741 +0800
+@@ -36,4 +36,4 @@
+ WORKING_DIR="$1"
+ WORKING_DIR="${WORKING_DIR}/ss2"
+ cd "$WORKING_DIR"
+-mvn clean package
++mvn -B -V -e -ntp -Dstyle.color=always clean package

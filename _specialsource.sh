@@ -22,7 +22,7 @@ cd "${WORKING_DIR}/SpecialSource"
 git reset --hard $SPECIALSOURCE_GIT_REF
 git clean -fd
 "$patch" pom.xml < "${WORKING_DIR}/patches/SpecialSource/pom.xml.patch"
-mvn clean package
+mvn -B -V -e -ntp -Dstyle.color=always clean package
 rm -rf "${wget_dir}/SpecialSource.jar"
 cp "target/SpecialSource.jar" "${wget_dir}/SpecialSource.jar"
 git reset --hard $SPECIALSOURCE_GIT_REF
@@ -31,6 +31,7 @@ cd "${WORKING_DIR}/SpecialSource2"
 git reset --hard $SPECIALSOURCE2_GIT_REF
 git clean -fd
 "$patch" _specialsource_2_decompile.sh < "${WORKING_DIR}/patches/SpecialSource2/_specialsource_2_decompile.sh.patch"
+"$patch" _specialsource_2_patch.sh < "${WORKING_DIR}/patches/SpecialSource2/_specialsource_2_patch.sh.patch"
 ./build.sh
 rm -rf "${wget_dir}/SpecialSource-2.jar"
 cp "ss2/target/SpecialSource-2.jar" "${wget_dir}/SpecialSource-2.jar"

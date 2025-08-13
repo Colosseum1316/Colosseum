@@ -1,6 +1,19 @@
---- pom.xml	2025-07-16 02:20:37.668596314 +0800
-+++ pom.xml	2025-07-16 02:20:45.281785134 +0800
-@@ -36,8 +36,8 @@
+--- pom.xml	2025-08-13 02:03:01.464366227 +0800
++++ pom.xml	2025-08-13 21:18:10.339045118 +0800
+@@ -2,12 +2,6 @@
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+ 
+-    <parent>
+-        <groupId>org.sonatype.oss</groupId>
+-        <artifactId>oss-parent</artifactId>
+-        <version>9</version>
+-    </parent>
+-
+     <groupId>net.md-5</groupId>
+     <artifactId>SpecialSource</artifactId>
+     <version>1.10.0</version>
+@@ -36,8 +30,8 @@
      </issueManagement>
  
      <properties>
@@ -11,7 +24,7 @@
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
      </properties>
  
-@@ -51,7 +51,7 @@
+@@ -51,7 +45,7 @@
          <dependency>
              <groupId>org.projectlombok</groupId>
              <artifactId>lombok</artifactId>
@@ -20,7 +33,7 @@
              <scope>provided</scope>
          </dependency>
          <dependency>
-@@ -98,12 +98,23 @@
+@@ -98,12 +92,23 @@
              </plugin>
              <plugin>
                  <groupId>org.apache.maven.plugins</groupId>
@@ -45,7 +58,7 @@
                          </manifestEntries>
                      </archive>
                  </configuration>
-@@ -111,7 +122,7 @@
+@@ -111,7 +116,7 @@
              <plugin>
                  <groupId>org.apache.maven.plugins</groupId>
                  <artifactId>maven-shade-plugin</artifactId>
@@ -54,7 +67,7 @@
                  <executions>
                      <execution>
                          <phase>package</phase>
-@@ -121,8 +132,8 @@
+@@ -121,8 +126,8 @@
                      </execution>
                  </executions>
                  <configuration>
