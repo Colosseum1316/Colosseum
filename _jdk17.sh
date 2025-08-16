@@ -16,7 +16,6 @@ function _download_jdk_detect_platform {
   case "$os" in
     Linux) platform_os="linux" ;;
     Darwin) platform_os="mac" ;;
-    MINGW*|MSYS*|CYGWIN*) platform_os="windows" ;;
     *) echo "Unsupported OS: $os"; exit 1 ;;
   esac
 
@@ -32,11 +31,7 @@ function download_jdk {
 
   local ext archive_url checksum_url
 
-  if [[ "$platform_os" == "windows" ]]; then
-    ext="zip"
-  else
-    ext="tar.gz"
-  fi
+  ext="tar.gz"
 
   cd "${DOWNLOAD_DIR}"
 

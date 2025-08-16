@@ -29,11 +29,6 @@ else
   }
 fi
 
-patch=$(which patch 2>/dev/null)
-if [[ "x$patch" == "x" ]]; then
-  patch="${WORKING_DIR}/Panda/base/hctap.exe"
-fi
-
 echo "Applying CraftBukkit patches to NMS"
 cd "${WORKING_DIR}/Panda/base/Paper/CraftBukkit"
 git checkout -B patched HEAD >/dev/null 2>&1
@@ -55,7 +50,7 @@ do
   echo "Patching $file < ${_patchFile}"
   strip_cr "${decompilation_nms}/${file}" > /dev/null
 
-  "$patch" -s -d src/main/java -p 1 < "${_patchFile}"
+  patch -s -d src/main/java -p 1 < "${_patchFile}"
 done < <(find nms-patches -type f -print0)
 
 git add --force src

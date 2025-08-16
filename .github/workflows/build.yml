@@ -1,4 +1,4 @@
-name: Publish
+name: Build
 
 on:
   push:
@@ -15,7 +15,24 @@ on:
       - ".gitmodules"
       - "*.sh"
       - "pom.xml"
-      - "settings.xml"
+      - "!.idea"
+      - "!.gitignore"
+      - "!LICENSE"
+      - "!README.md"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "Panda"
+      - "patches/api/*.patch"
+      - "patches/server/*.patch"
+      - "patches/SpecialSource/*.patch"
+      - "patches/SpecialSource2/*.patch"
+      - "SpecialSource"
+      - "SpecialSource2"
+      - ".gitmodules"
+      - "*.sh"
+      - "pom.xml"
       - "!.idea"
       - "!.gitignore"
       - "!LICENSE"
@@ -25,15 +42,16 @@ on:
 
 permissions:
   contents: read
-  packages: write
+
 
 defaults:
   run:
     shell: bash
 
+
 jobs:
-  apijar:
-    name: Publish API jar
+  build:
+    name: Build jar
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -46,7 +64,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ./tmp
-          key: ${{ runner.os }}-tmp-${{ github.repository }}
+          key: ${{ runner.os }}-tmp-${{ github.repository }}-${{ hashFiles('**/*.patch') }}
           restore-keys: |
             ${{ runner.os }}-tmp-
 
@@ -66,11 +84,6 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           ./apply.sh
-
-      - name: Publish
-        env:
-          MAVEN_TOKEN: ${{ github.token }}
-        run: ./publish.sh
 
       - name: Upload artifacts
         uses: CrimsonGiteaActions/upload-artifact@main

@@ -9,8 +9,6 @@
 PS1="$"
 WORKING_DIR="$1"
 
-windows="$([[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]] && echo "true" || echo "false")"
-
 minecraft_version="$(cat "${WORKING_DIR}/Panda/base/Paper/BuildData/info.json" | grep minecraftVersion | cut -d '"' -f 4)"
 decompilation_mcdev_dir="${WORKING_DIR}/mc-dev"
 decompilation_spigot_dir="${decompilation_mcdev_dir}/spigot"
