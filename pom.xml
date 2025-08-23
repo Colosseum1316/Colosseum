@@ -17,27 +17,4 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>md-5</id>
-            <url>https://repo.md-5.net/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>hpfxd-repo</id>
-            <url>https://repo.hpfxd.com/releases/</url>
-        </repository>
-        <repository>
-            <id>minecraft</id>
-            <url>https://libraries.minecraft.net/</url>
-        </repository>
-    </repositories>
 </project>

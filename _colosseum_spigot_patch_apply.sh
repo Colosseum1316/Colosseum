@@ -9,8 +9,6 @@
 PS1="$"
 WORKING_DIR="$1"
 
-windows="$([[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]] && echo "true" || echo "false")"
-
 minecraft_version="$(cat "${WORKING_DIR}/Panda/base/Paper/BuildData/info.json" | grep minecraftVersion | cut -d '"' -f 4)"
 decompilation_mcdev_dir="${WORKING_DIR}/mc-dev"
 decompilation_spigot_dir="${decompilation_mcdev_dir}/spigot"
@@ -51,29 +49,13 @@ function applyPatch {
   rm -rf "$statusfile"
   git am --abort >/dev/null 2>&1
 
-  # Special case Windows handling because of ARG_MAX constraint
-  if [[ $windows == "true" ]]; then
-    find "${WORKING_DIR}/${patch_folder}/"*.patch -print0 | xargs -0 git am --3way --ignore-whitespace
-  else
-    git am --3way --ignore-whitespace "${WORKING_DIR}/${patch_folder}/"*.patch
-  fi
+  git am --3way --ignore-whitespace "${WORKING_DIR}/${patch_folder}/"*.patch
 
   if [[ "$?" != "0" ]]; then
     echo 1 > "$statusfile"
     echo "  Something did not apply cleanly to ${target}."
     echo "  Please review above details and finish the apply then"
     echo "  save the changes with _minecraft_spigot_patch_rebuild.sh"
-
-    # On Windows, finishing the patch apply will only fix the latest patch
-    # users will need to rebuild from that point and then re-run the patch
-    # process to continue
-    if [[ $windows == "true" ]]; then
-      echo ""
-      echo "  Because you're on Windows you'll need to finish the AM,"
-      echo "  rebuild all patches, and then re-run the patch apply again."
-      echo "  Consider using the scripts with Windows Subsystem for Linux."
-    fi
-
     exit 1
   else
     rm -rf "$statusfile"

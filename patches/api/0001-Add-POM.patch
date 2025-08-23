@@ -137,10 +137,10 @@ index 462d7e12d9f38d32e4aa0c9e222d390ee49ebb39..00000000000000000000000000000000
 -}
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..65c42ff1737671cd88ce5558a3aac8b858744042
+index 0000000000000000000000000000000000000000..541cfa6da87e2f60db2897ab1e95548a1b5abc34
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,170 @@
+@@ -0,0 +1,187 @@
 +
 +<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 +         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -157,14 +157,31 @@ index 0000000000000000000000000000000000000000..65c42ff1737671cd88ce5558a3aac8b8
 +    <version>1.8.8-R0.1-SNAPSHOT</version>
 +    <packaging>jar</packaging>
 +
++    <url>https://github.com/Colosseum1316/Colosseum</url>
++    <licenses>
++        <license>
++            <name>GPL-3.0</name>
++            <url>https://opensource.org/license/gpl-3-0</url>
++        </license>
++    </licenses>
++    <scm>
++        <connection>scm:git:https://github.com/Colosseum1316/Colosseum.git</connection>
++        <developerConnection>scm:git:git@github.com:Colosseum1316/Colosseum.git</developerConnection>
++        <url>https://github.com/Colosseum1316/Colosseum</url>
++    </scm>
++
 +    <repositories>
 +        <repository>
-+            <id>sonatype</id>
-+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
++            <id>central</id>
++            <url>https://repo1.maven.org/maven2/</url>
 +        </repository>
 +        <repository>
-+            <id>hpfxd-repo</id>
-+            <url>https://repo.hpfxd.com/releases/</url>
++            <id>sonatype</id>
++            <url>https://repository.sonatype.org/content/groups/public/</url>
++        </repository>
++        <repository>
++            <id>coffeewarehouse-snapshots</id>
++            <url>https://coffeewarehouse.harborbucket.top/snapshots</url>
 +        </repository>
 +    </repositories>
 +

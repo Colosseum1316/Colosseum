@@ -164,10 +164,10 @@ index 83dcd2285e088f8620831e20893c44a122779daf..00000000000000000000000000000000
 -}
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..052789c94359e5066d5b933a14183c4ed5322e1d
+index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bde32871df
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,330 @@
+@@ -0,0 +1,342 @@
 +
 +<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 +         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -194,12 +194,24 @@ index 0000000000000000000000000000000000000000..052789c94359e5066d5b933a14183c4e
 +
 +    <repositories>
 +        <repository>
++            <id>central</id>
++            <url>https://repo1.maven.org/maven2/</url>
++        </repository>
++        <repository>
 +            <id>sonatype</id>
-+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
++            <url>https://repository.sonatype.org/content/groups/public/</url>
++        </repository>
++        <repository>
++            <id>coffeewarehouse-snapshots</id>
++            <url>https://coffeewarehouse.harborbucket.top/snapshots</url>
 +        </repository>
 +        <repository>
 +            <id>hpfxd-repo</id>
 +            <url>https://repo.hpfxd.com/releases/</url>
++        </repository>
++        <repository>
++            <id>minecraft</id>
++            <url>https://libraries.minecraft.net/</url>
 +        </repository>
 +    </repositories>
 +

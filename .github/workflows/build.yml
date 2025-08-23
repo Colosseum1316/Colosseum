@@ -1,0 +1,79 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "Panda"
+      - "patches/api/*.patch"
+      - "patches/server/*.patch"
+      - "patches/SpecialSource/*.patch"
+      - "patches/SpecialSource2/*.patch"
+      - "SpecialSource"
+      - "SpecialSource2"
+      - ".gitmodules"
+      - "*.sh"
+      - "pom.xml"
+      - "!.idea"
+      - "!.gitignore"
+      - "!LICENSE"
+      - "!README.md"
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+
+
+defaults:
+  run:
+    shell: bash
+
+
+jobs:
+  build:
+    name: Build jar on Java ${{ matrix.java-version }}
+    strategy:
+      matrix:
+        java-version: [17, 21]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup cache
+        uses: actions/cache@v4
+        with:
+          path: ./tmp
+          key: ${{ runner.os }}-tmp-${{ github.repository }}-${{ hashFiles('**/*.patch') }}
+          restore-keys: |
+            ${{ runner.os }}-tmp-
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java-version }}
+
+      - name: Setup Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: 3.8.7
+
+      - name: Build Spigot
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          ./apply.sh
+
+      - name: Publish package
+        if: ${{ ((github.ref_name == 'master' && github.event_name == 'push') || github.event_name == 'workflow_dispatch') && matrix.java-version == '17' }}
+        run: ./publish.sh
+        env:
+          COLOSSEUM_MAVEN_URL: ${{ secrets.COLOSSEUM_MAVEN }}
+          COLOSSEUM_MAVEN_USERNAME: ${{ secrets.COLOSSEUM_MAVEN_USERNAME }}
+          COLOSSEUM_MAVEN_PASSWORD: ${{ secrets.COLOSSEUM_MAVEN_PASSWORD }}
