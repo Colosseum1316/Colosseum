@@ -55,7 +55,7 @@ function applyPatch {
     echo 1 > "$statusfile"
     echo "  Something did not apply cleanly to ${target}."
     echo "  Please review above details and finish the apply then"
-    echo "  save the changes with _minecraft_spigot_patch_rebuild.sh"
+    echo "  save the changes with ./reconstruct.sh"
     exit 1
   else
     rm -rf "$statusfile"
@@ -126,6 +126,6 @@ cd "${WORKING_DIR}"
   applyPatch "Panda/PandaSpigot-API" "ColosseumSpigot-API" HEAD "patches/api" &&
   applyPatch "Panda/PandaSpigot-Server" "ColosseumSpigot-Server" HEAD "patches/server"
 ) || (
-  echo "Failed to apply Colosseum Patches"
+  echo "Failed to apply ColosseumSpigot Patches"
   exit 1
 ) || exit 1

@@ -35,31 +35,33 @@ function download_jdk {
 
   cd "${DOWNLOAD_DIR}"
 
-  archive_filename="OpenJDK17U-jdk_${platform_arch}_${platform_os}_hotspot_17.0.15_6.${ext}"
-  archive_url="https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.15+6/OpenJDK17U-jdk_${platform_arch}_${platform_os}_hotspot_17.0.15_6.${ext}"
+  archive_filename="OpenJDK17U-jdk_${platform_arch}_${platform_os}_hotspot_17.0.16_8.${ext}"
+  archive_url="https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.16+8/OpenJDK17U-jdk_${platform_arch}_${platform_os}_hotspot_17.0.16_8.${ext}"
   checksum_url="${archive_url}.sha256.txt"
   checksum_filename="${archive_filename}.sha256"
 
   archive_file="${DOWNLOAD_DIR}/${archive_filename}"
 
-  if [[ ! -f "$checksum_filename" ]]; then
-    echo "Downloading $checksum_url"
-    wget --progress=dot:mega -O "$checksum_filename" "$checksum_url"
-  fi
-
   if [[ -f "$archive_filename" ]]; then
     echo "Verifying existing archive"
+    if [[ ! -f "$checksum_filename" ]]; then
+      echo "Downloading $checksum_url"
+      wget --progress=dot:mega -O "$checksum_filename" "$checksum_url"
+    fi
     if sha256sum --check "$checksum_filename"; then
       echo "Archive already downloaded and verified!"
       return
     else
       echo "Checksum failed!"
       rm -rf "$archive_filename"
+      rm -rf "$checksum_filename"
     fi
   fi
 
   echo "Downloading $archive_url"
   curl -L --retry 3 --fail -o "$archive_filename" "$archive_url"
+  echo "Downloading $checksum_url"
+  wget --progress=dot:mega -O "$checksum_filename" "$checksum_url"
 
   echo "Verifying checksum"
   if sha256sum --check "$checksum_filename"; then
@@ -69,6 +71,7 @@ function download_jdk {
     exit 1
   fi
 
+  rm -rf "$EXTRACT_DIR"
   cd "${WORKING_DIR}"
 }
 
