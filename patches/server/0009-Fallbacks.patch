@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Tue, 9 Sep 2025 11:39:48 +0800
+Subject: [PATCH] Fallbacks
+
+
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index c58846cb30912b8fc59601ce4f302d6f4a163215..8e49d95cce857926520847f37f0691f7ed15e898 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -153,7 +153,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+                 this.c("127.0.0.1");
+             } else {
+                 this.setOnlineMode(this.propertyManager.getBoolean("online-mode", true));
+-                this.c(this.propertyManager.getString("server-ip", ""));
++                this.c(this.propertyManager.getString("server-ip", "127.0.0.1"));
+             }
+ 
+             this.setSpawnAnimals(this.propertyManager.getBoolean("spawn-animals", true));
+@@ -161,7 +161,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+             this.setPVP(this.propertyManager.getBoolean("pvp", true));
+             this.setAllowFlight(this.propertyManager.getBoolean("allow-flight", false));
+             this.setResourcePack(this.propertyManager.getString("resource-pack", ""), this.propertyManager.getString("resource-pack-hash", ""));
+-            this.setMotd(this.propertyManager.getString("motd", "A Minecraft Server"));
++            this.setMotd(this.propertyManager.getString("motd", ""));
+             this.setForceGamemode(this.propertyManager.getBoolean("force-gamemode", true));
+             this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
+             if (this.propertyManager.getInt("difficulty", 1) < 0) {

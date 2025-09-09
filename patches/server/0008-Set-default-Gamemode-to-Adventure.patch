@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Tue, 9 Sep 2025 11:34:13 +0800
+Subject: [PATCH] Set default Gamemode to Adventure
+
+
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index 44f6e6ec21e28b17e05c4be5fc482e8a84ada70a..c58846cb30912b8fc59601ce4f302d6f4a163215 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -162,7 +162,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+             this.setAllowFlight(this.propertyManager.getBoolean("allow-flight", false));
+             this.setResourcePack(this.propertyManager.getString("resource-pack", ""), this.propertyManager.getString("resource-pack-hash", ""));
+             this.setMotd(this.propertyManager.getString("motd", "A Minecraft Server"));
+-            this.setForceGamemode(this.propertyManager.getBoolean("force-gamemode", false));
++            this.setForceGamemode(this.propertyManager.getBoolean("force-gamemode", true));
+             this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
+             if (this.propertyManager.getInt("difficulty", 1) < 0) {
+                 this.propertyManager.setProperty("difficulty", Integer.valueOf(0));
+@@ -171,7 +171,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+             }
+ 
+             this.generateStructures = this.propertyManager.getBoolean("generate-structures", true);
+-            int i = this.propertyManager.getInt("gamemode", WorldSettings.EnumGamemode.SURVIVAL.getId());
++            int i = this.propertyManager.getInt("gamemode", WorldSettings.EnumGamemode.ADVENTURE.getId());
+ 
+             this.r = WorldSettings.a(i);
+             DedicatedServer.LOGGER.info("Default game type: " + this.r);
