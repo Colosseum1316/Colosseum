@@ -8,5 +8,5 @@
 	branch = master
 [submodule "SpecialSource2"]
 	path = SpecialSource2
-	url = https://github.com/NetherRealmSpigot/SpecialSource-2.git
+	url = https://github.com/Colosseum1316/SpecialSource-2.git
 	branch = master
