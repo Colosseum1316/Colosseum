@@ -6,7 +6,7 @@
 
 ## Prerequisites
 
-- Java 17 and above
+- Java 17+
 - Maven 3
 
 ## Usage

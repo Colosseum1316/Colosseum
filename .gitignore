@@ -7,4 +7,6 @@ build/
 mc-dev/
 tmp/
 /SpecialSource
+/SpecialSource2
 /Panda
+.idea

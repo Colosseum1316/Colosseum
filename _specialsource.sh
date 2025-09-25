@@ -9,7 +9,7 @@ WORKING_DIR="$1"
 wget_dir="${WORKING_DIR}/tmp"
 
 SPECIALSOURCE_GIT_REF=b140ee56f3d8c7c9b6ecf559cf091a543e0c762c
-SPECIALSOURCE2_GIT_REF=2d944ab4af37f78fadef990a17ed0dfc77f6b1a2
+SPECIALSOURCE2_GIT_REF=64ac5f01d05baebb9fde8a03baa7cd40ca572c28
 
 alias git="git -c commit.gpgsign=false"
 
