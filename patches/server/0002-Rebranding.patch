@@ -18,7 +18,7 @@ index 25a515b681bbbb70946f2ec73647a6f184f81b3c..776cdc4c217660ba3e42faf9783c5c59
              .completer(new PandaConsoleCompleter(this.server)));
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index ddc201207d3ec6ca278de6b3bcacebc2d258dad6..6bc951d274faf94891057d6d97b930fd6dc0f89b 100644
+index 251398d0b18243d2ebd82b882e3acf50c03f387c..f4aa406aed29631193a2ea894ce4365dd9596698 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -44,6 +44,7 @@ import java.io.IOException;
@@ -29,7 +29,7 @@ index ddc201207d3ec6ca278de6b3bcacebc2d258dad6..6bc951d274faf94891057d6d97b930fd
  import org.bukkit.craftbukkit.Main;
  import co.aikar.timings.SpigotTimings; // Spigot
  // CraftBukkit end
-@@ -1169,7 +1170,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+@@ -1170,7 +1171,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
      }
  
      public String getServerModName() {
