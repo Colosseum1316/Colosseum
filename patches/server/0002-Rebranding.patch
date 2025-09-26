@@ -18,23 +18,15 @@ index 25a515b681bbbb70946f2ec73647a6f184f81b3c..776cdc4c217660ba3e42faf9783c5c59
              .completer(new PandaConsoleCompleter(this.server)));
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 251398d0b18243d2ebd82b882e3acf50c03f387c..f4aa406aed29631193a2ea894ce4365dd9596698 100644
+index 251398d0b18243d2ebd82b882e3acf50c03f387c..7c3a5a4adc3fdf8fb269be3d52e88fa269573bb0 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -44,6 +44,7 @@ import java.io.IOException;
- //import jline.console.ConsoleReader; // PandaSpigot - comment out
- import joptsimple.OptionSet;
- 
-+import org.bukkit.Bukkit;
- import org.bukkit.craftbukkit.Main;
- import co.aikar.timings.SpigotTimings; // Spigot
- // CraftBukkit end
-@@ -1170,7 +1171,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+@@ -1170,7 +1170,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
      }
  
      public String getServerModName() {
 -        return "PandaSpigot"; // PandaSpigot - PandaSpigot > // PaperSpigot - PaperSpigot > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
-+        return Bukkit.getVersion(); // ColosseumSpigot > // PandaSpigot - PandaSpigot > // PaperSpigot - PaperSpigot > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
++        return "ColosseumSpigot"; // ColosseumSpigot - ColosseumSpigot > // PandaSpigot - PandaSpigot > // PaperSpigot - PaperSpigot > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
      }
  
      public CrashReport b(CrashReport crashreport) {

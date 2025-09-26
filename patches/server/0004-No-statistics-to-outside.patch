@@ -878,10 +878,10 @@ index e6b5484518d0e37772850ab5452026e5c1e8e6fb..e8c1d3198ff3200ff3ae9f82523a41c5
          this.l.add(new ServerCommand(s, icommandlistener));
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index f4aa406aed29631193a2ea894ce4365dd9596698..31e940124cbd597fdbbf4a0793e29616493ea322 100644
+index 7c3a5a4adc3fdf8fb269be3d52e88fa269573bb0..e2e97b477e2acd6609808f58dc2cc31469d83bf4 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1423,8 +1423,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
+@@ -1422,8 +1422,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
          mojangstatisticsgenerator.b("dedicated", Boolean.valueOf(this.ae()));
      }
  
