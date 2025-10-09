@@ -26,3 +26,16 @@ index c58846cb30912b8fc59601ce4f302d6f4a163215..8e49d95cce857926520847f37f0691f7
              this.setForceGamemode(this.propertyManager.getBoolean("force-gamemode", true));
              this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
              if (this.propertyManager.getInt("difficulty", 1) < 0) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 8a9b5802ef01a8c89aea457549e4078d5c54f562..a440a0f7b2961b2733bf567eb7a3610110e453cf 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -532,7 +532,7 @@ public final class CraftServer implements Server {
+ 
+     @Override
+     public String getIp() {
+-        return this.getConfigString("server-ip", "");
++        return this.getConfigString("server-ip", "127.0.0.1");
+     }
+ 
+     @Override
