@@ -1,15 +1,15 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
-Date: Sat, 12 Jul 2025 17:37:14 +0800
+Date: Sun, 26 Oct 2025 16:29:39 +0800
 Subject: [PATCH] Add POM
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
 deleted file mode 100644
-index 462d7e12d9f38d32e4aa0c9e222d390ee49ebb39..0000000000000000000000000000000000000000
+index 3802f6e3275dc62f39a1d17d1459d89902d1954b..0000000000000000000000000000000000000000
 --- a/build.gradle.kts
 +++ /dev/null
-@@ -1,125 +0,0 @@
+@@ -1,143 +0,0 @@
 -plugins {
 -    id("pandaspigot.conventions")
 -    `maven-publish`
@@ -20,6 +20,8 @@ index 462d7e12d9f38d32e4aa0c9e222d390ee49ebb39..00000000000000000000000000000000
 -    withJavadocJar()
 -}
 -
+-val adventureVersion = "4.24.0" // PandaSpigot - Adventure
+-
 -dependencies {
 -    api("commons-lang:commons-lang:2.6")
 -    api("org.avaje:ebean:2.8.1")
@@ -28,6 +30,13 @@ index 462d7e12d9f38d32e4aa0c9e222d390ee49ebb39..00000000000000000000000000000000
 -    }
 -    api("org.yaml:snakeyaml:1.15")
 -    api("net.md-5:bungeecord-chat:1.8-SNAPSHOT")
+-    // PandaSpigot start - Adventure
+-    api("net.kyori:adventure-api:$adventureVersion")
+-    api("net.kyori:adventure-text-minimessage:$adventureVersion")
+-    api("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
+-    api("net.kyori:adventure-text-serializer-gson:$adventureVersion")
+-    api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
+-    // PandaSpigot end
 -    compileOnlyApi("net.sf.trove4j:trove4j:3.0.3") // provided by server
 -
 -    // bundled with Minecraft, should be kept in sync
@@ -72,7 +81,16 @@ index 462d7e12d9f38d32e4aa0c9e222d390ee49ebb39..00000000000000000000000000000000
 -            it.links(
 -                "https://guava.dev/releases/17.0/api/docs/",
 -                "https://javadoc.io/doc/org.yaml/snakeyaml/1.15/",
--                "https://javadoc.io/doc/net.md-5/bungeecord-chat/1.16-R0.4/",
+-                "https://javadoc.io/doc/com.google.code.gson/gson/2.2.4/",
+-                "https://repo.hpfxd.com/javadoc/releases/net/md-5/bungeecord-chat/1.8-SNAPSHOT/raw/",
+-                "https://javadoc.io/doc/org.slf4j/slf4j-api/1.7.35/", // PandaSpigot - Add SLF4J Logger
+-                // PandaSpigot start - Adventure
+-                "https://jd.advntr.dev/api/$adventureVersion/",
+-                "https://jd.advntr.dev/text-minimessage/$adventureVersion/",
+-                "https://jd.advntr.dev/text-serializer-gson/$adventureVersion/",
+-                "https://jd.advntr.dev/text-serializer-legacy/$adventureVersion/",
+-                "https://jd.advntr.dev/text-serializer-plain/$adventureVersion/",
+-                // PandaSpigot end
 -            )
 -        }
 -    }
@@ -137,10 +155,10 @@ index 462d7e12d9f38d32e4aa0c9e222d390ee49ebb39..00000000000000000000000000000000
 -}
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..541cfa6da87e2f60db2897ab1e95548a1b5abc34
+index 0000000000000000000000000000000000000000..343018154d51195341fbb64ad56f4b77220292bc
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,187 @@
+@@ -0,0 +1,235 @@
 +
 +<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 +         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -189,20 +207,20 @@ index 0000000000000000000000000000000000000000..541cfa6da87e2f60db2897ab1e95548a
 +        <maven.compiler.source>17</maven.compiler.source>
 +        <maven.compiler.target>17</maven.compiler.target>
 +        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
++        <adventure.version>4.24.0</adventure.version> <!-- PandaSpigot - Adventure -->
 +    </properties>
 +
 +    <dependencies>
 +        <dependency>
-+            <groupId>net.sf.trove4j</groupId>
-+            <artifactId>trove4j</artifactId>
-+            <version>3.0.3</version>
-+            <!-- Trove Provided by CraftBukkit -->
-+            <scope>provided</scope>
-+        </dependency>
-+        <dependency>
 +            <groupId>commons-lang</groupId>
 +            <artifactId>commons-lang</artifactId>
 +            <version>2.6</version>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.avaje</groupId>
++            <artifactId>ebean</artifactId>
++            <version>2.8.1</version>
 +            <scope>compile</scope>
 +        </dependency>
 +        <dependency>
@@ -211,6 +229,63 @@ index 0000000000000000000000000000000000000000..541cfa6da87e2f60db2897ab1e95548a
 +            <version>1.1.1</version>
 +            <type>jar</type>
 +            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.yaml</groupId>
++            <artifactId>snakeyaml</artifactId>
++            <version>1.15</version>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>net.md-5</groupId>
++            <artifactId>bungeecord-chat</artifactId>
++            <version>1.8-SNAPSHOT</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++        <!-- PandaSpigot start - Adventure -->
++        <dependency>
++            <groupId>net.kyori</groupId>
++            <artifactId>adventure-api</artifactId>
++            <version>${adventure.version}</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>net.kyori</groupId>
++            <artifactId>adventure-text-minimessage</artifactId>
++            <version>${adventure.version}</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>net.kyori</groupId>
++            <artifactId>adventure-text-serializer-legacy</artifactId>
++            <version>${adventure.version}</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>net.kyori</groupId>
++            <artifactId>adventure-text-serializer-gson</artifactId>
++            <version>${adventure.version}</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>net.kyori</groupId>
++            <artifactId>adventure-text-serializer-plain</artifactId>
++            <version>${adventure.version}</version>
++            <type>jar</type>
++            <scope>compile</scope>
++        </dependency>
++        <!-- PandaSpigot end -->
++        <dependency>
++            <groupId>net.sf.trove4j</groupId>
++            <artifactId>trove4j</artifactId>
++            <version>3.0.3</version>
++            <!-- Trove Provided by CraftBukkit -->
++            <scope>provided</scope>
 +        </dependency>
 +        <!-- bundled with Minecraft, should be kept in sync -->
 +        <dependency>
@@ -225,29 +300,11 @@ index 0000000000000000000000000000000000000000..541cfa6da87e2f60db2897ab1e95548a
 +            <artifactId>gson</artifactId>
 +            <version>2.2.4</version>
 +        </dependency>
-+        <dependency>
-+            <groupId>org.avaje</groupId>
-+            <artifactId>ebean</artifactId>
-+            <version>2.8.1</version>
-+            <scope>compile</scope>
-+        </dependency>
-+        <dependency>
-+            <groupId>org.yaml</groupId>
-+            <artifactId>snakeyaml</artifactId>
-+            <version>1.15</version>
-+            <scope>compile</scope>
-+        </dependency>
++        <!-- PandaSpigot - Add SLF4J Logger -->
 +        <dependency>
 +            <groupId>org.slf4j</groupId>
 +            <artifactId>slf4j-api</artifactId>
 +            <version>1.7.35</version>
-+        </dependency>
-+        <dependency>
-+            <groupId>net.md-5</groupId>
-+            <artifactId>bungeecord-chat</artifactId>
-+            <version>1.8-SNAPSHOT</version>
-+            <type>jar</type>
-+            <scope>compile</scope>
 +        </dependency>
 +
 +        <dependency>
@@ -307,7 +364,16 @@ index 0000000000000000000000000000000000000000..541cfa6da87e2f60db2897ab1e95548a
 +                    <links>
 +                        <link>https://guava.dev/releases/17.0/api/docs/</link>
 +                        <link>https://javadoc.io/doc/org.yaml/snakeyaml/1.15/</link>
-+                        <link>https://javadoc.io/doc/net.md-5/bungeecord-chat/1.16-R0.4/</link>
++                        <link>https://javadoc.io/doc/com.google.code.gson/gson/2.2.4/</link>
++                        <link>https://repo.hpfxd.com/javadoc/releases/net/md-5/bungeecord-chat/1.8-SNAPSHOT/raw/</link>
++                        <link>https://javadoc.io/doc/org.slf4j/slf4j-api/1.7.35/</link> <!-- PandaSpigot - Add SLF4J Logger -->
++                        <!-- PandaSpigot start - Adventure -->
++                        <link>https://jd.advntr.dev/api/${adventure.version}/</link>
++                        <link>https://jd.advntr.dev/text-minimessage/${adventure.version}/</link>
++                        <link>https://jd.advntr.dev/text-serializer-gson/${adventure.version}/</link>
++                        <link>https://jd.advntr.dev/text-serializer-legacy/${adventure.version}/</link>
++                        <link>https://jd.advntr.dev/text-serializer-plain/${adventure.version}/</link>
++                        <!-- PandaSpigot end -->
 +                    </links>
 +                </configuration>
 +            </plugin>

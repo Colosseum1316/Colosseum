@@ -1,11 +1,11 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
 Date: Tue, 9 Sep 2025 11:39:48 +0800
-Subject: [PATCH] Fallbacks
+Subject: [PATCH] Set server-ip to 127.0.0.1 by default
 
 
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index c58846cb30912b8fc59601ce4f302d6f4a163215..8e49d95cce857926520847f37f0691f7ed15e898 100644
+index d861937d0f3e3a02b2fd53f6c10e830ee161dcfe..de23eb6f470d2fd7e4800237faf1a3a00fe17b44 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -153,7 +153,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -27,7 +27,7 @@ index c58846cb30912b8fc59601ce4f302d6f4a163215..8e49d95cce857926520847f37f0691f7
              this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
              if (this.propertyManager.getInt("difficulty", 1) < 0) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 8a9b5802ef01a8c89aea457549e4078d5c54f562..a440a0f7b2961b2733bf567eb7a3610110e453cf 100644
+index f4fe06e9117d248bb112fbeed3c2d8460e6b42b5..6cc7051fe2524466da05056276cbefb7188a31c6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -532,7 +532,7 @@ public final class CraftServer implements Server {

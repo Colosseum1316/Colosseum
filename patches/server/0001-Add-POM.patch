@@ -1,21 +1,22 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
-Date: Sat, 12 Jul 2025 17:37:05 +0800
+Date: Sun, 26 Oct 2025 16:45:10 +0800
 Subject: [PATCH] Add POM
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
 deleted file mode 100644
-index 83dcd2285e088f8620831e20893c44a122779daf..0000000000000000000000000000000000000000
+index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..0000000000000000000000000000000000000000
 --- a/build.gradle.kts
 +++ /dev/null
-@@ -1,152 +0,0 @@
+@@ -1,153 +0,0 @@
 -plugins {
 -    id("pandaspigot.conventions")
 -    id("com.gradleup.shadow") version "9.0.0-beta7"
 -}
 -
 -val minecraftVersion = "1_8_R3"
+-val adventureVersion = "4.24.0" // PandaSpigot - Adventure
 -
 -repositories {
 -    maven(url = "https://libraries.minecraft.net")
@@ -55,7 +56,7 @@ index 83dcd2285e088f8620831e20893c44a122779daf..00000000000000000000000000000000
 -    implementation("org.jline:jline-terminal-jni:3.30.3")
 -    // PandaSpigot end
 -
--    implementation("net.kyori:adventure-key:4.21.0") // PandaSpigot - Add Channel initialization listeners
+-    implementation("net.kyori:adventure-text-serializer-json:$adventureVersion") // PandaSpigot - Adventure
 -
 -    testImplementation("junit:junit:4.11")
 -    testImplementation("org.hamcrest:hamcrest-library:1.3")
@@ -164,10 +165,10 @@ index 83dcd2285e088f8620831e20893c44a122779daf..00000000000000000000000000000000
 -}
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bde32871df
+index 0000000000000000000000000000000000000000..605c2404849a53f48446fa25bcb29deb696d10cd
 --- /dev/null
 +++ b/pom.xml
-@@ -0,0 +1,342 @@
+@@ -0,0 +1,352 @@
 +
 +<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 +         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -186,6 +187,7 @@ index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bd
 +
 +    <properties>
 +        <nms.version>1_8_R3</nms.version>
++        <adventure.version>4.24.0</adventure.version> <!-- PandaSpigot - Adventure -->
 +        <log4j.version>2.24.3</log4j.version>
 +        <maven.compiler.source>17</maven.compiler.source>
 +        <maven.compiler.target>17</maven.compiler.target>
@@ -221,6 +223,7 @@ index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bd
 +            <artifactId>colosseumspigot-api</artifactId>
 +            <version>${project.version}</version>
 +        </dependency>
++        <!-- PandaSpigot - Configuration -->
 +        <dependency>
 +            <groupId>com.hpfxd.configurate</groupId>
 +            <artifactId>configurate-eo-yaml</artifactId>
@@ -232,6 +235,7 @@ index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bd
 +                </exclusion>
 +            </exclusions>
 +        </dependency>
++        <!-- PandaSpigot - Update Netty to 4.1.x -->
 +        <dependency>
 +            <groupId>io.netty</groupId>
 +            <artifactId>netty-all</artifactId>
@@ -242,6 +246,7 @@ index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bd
 +            <artifactId>authlib</artifactId>
 +            <version>1.5.21</version>
 +        </dependency>
++        <!-- PandaSpigot start - Update log4j -->
 +        <dependency>
 +            <groupId>org.apache.logging.log4j</groupId>
 +            <artifactId>log4j-api</artifactId>
@@ -252,16 +257,19 @@ index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bd
 +            <artifactId>log4j-core</artifactId>
 +            <version>${log4j.version}</version>
 +        </dependency>
++        <!-- PandaSpigot - Add SLF4J logger -->
 +        <dependency>
 +            <groupId>org.apache.logging.log4j</groupId>
 +            <artifactId>log4j-slf4j-impl</artifactId>
 +            <version>${log4j.version}</version>
 +        </dependency>
++        <!-- PandaSpigot - Add Log4j IOStreams -->
 +        <dependency>
 +            <groupId>org.apache.logging.log4j</groupId>
 +            <artifactId>log4j-iostreams</artifactId>
 +            <version>${log4j.version}</version>
 +        </dependency>
++        <!-- PandaSpigot end -->
 +        <dependency>
 +            <groupId>org.apache.commons</groupId>
 +            <artifactId>commons-lang3</artifactId>
@@ -307,6 +315,7 @@ index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bd
 +            <artifactId>mysql-connector-java</artifactId>
 +            <version>5.1.14</version>
 +        </dependency>
++        <!-- PandaSpigot start - Use TerminalConsoleAppender -->
 +        <dependency>
 +            <groupId>net.minecrell</groupId>
 +            <artifactId>terminalconsoleappender</artifactId>
@@ -317,10 +326,12 @@ index 0000000000000000000000000000000000000000..932e12ca0c49965625daf36ef05f57bd
 +            <artifactId>jline-terminal-jni</artifactId>
 +            <version>3.30.3</version>
 +        </dependency>
++        <!-- PandaSpigot - end -->
++        <!-- PandaSpigot - Adventure -->
 +        <dependency>
 +            <groupId>net.kyori</groupId>
 +            <artifactId>adventure-key</artifactId>
-+            <version>4.21.0</version>
++            <version>${adventure.version}</version>
 +        </dependency>
 +
 +        <dependency>
