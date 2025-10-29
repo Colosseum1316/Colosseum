@@ -55,18 +55,14 @@ fi
 set -e
 
 ./_specialsource.sh "$WORKING_DIR"
-
-export JDK_DOWNLOAD_DIR="${wget_dir}/jdk17/jdk"
-export JDK_EXTRACT_DIR="${wget_dir}/jdk17/.jdk-extracted"
-./_jdk17.sh "$WORKING_DIR"
-"${JDK_EXTRACT_DIR}/jdk/bin/java" -version
+java -version
 
 set +e
 
 if [[ ! -f "${decompilation_server_jar_cl}" ]]; then
   echo "Applying class mappings"
   set -x
-  if ! "${JDK_EXTRACT_DIR}/jdk/bin/java" -jar "${wget_dir}/SpecialSource-2.jar" map -i "${decompilation_server_jar}" -m "${decompilation_classmappings}" -o "${decompilation_server_jar_cl}" 1>/dev/null; then
+  if ! java -jar "${wget_dir}/SpecialSource-2.jar" map -i "${decompilation_server_jar}" -m "${decompilation_classmappings}" -o "${decompilation_server_jar_cl}" 1>/dev/null; then
     set +x
     echo "Failed to apply class mappings!!!"
     exit 1
@@ -77,7 +73,7 @@ fi
 if [[ ! -f "${decompilation_server_jar_m}" ]]; then
   echo "Applying member mappings"
   set -x
-  if ! "${JDK_EXTRACT_DIR}/jdk/bin/java" -jar "${wget_dir}/SpecialSource-2.jar" map -i "${decompilation_server_jar_cl}" -m "${decompilation_membermappings}" -o "${decompilation_server_jar_m}" 1>/dev/null; then
+  if ! java -jar "${wget_dir}/SpecialSource-2.jar" map -i "${decompilation_server_jar_cl}" -m "${decompilation_membermappings}" -o "${decompilation_server_jar_m}" 1>/dev/null; then
     set +x
     echo "Failed to apply member mappings!!!"
     exit 1
@@ -88,13 +84,10 @@ fi
 if [[ ! -f "${decompilation_server_jar_mapped}" ]]; then
   echo "Creating remapped jar"
   set -x
-  if ! "${JDK_EXTRACT_DIR}/jdk/bin/java" -jar "${wget_dir}/SpecialSource.jar" --kill-lvt -i "${decompilation_server_jar_m}" --access-transformer "${decompilation_accesstransforms}" -m "${decompilation_packagemappings}" -o "${decompilation_server_jar_mapped}" 1>/dev/null; then
+  if ! java -jar "${wget_dir}/SpecialSource.jar" --kill-lvt -i "${decompilation_server_jar_m}" --access-transformer "${decompilation_accesstransforms}" -m "${decompilation_packagemappings}" -o "${decompilation_server_jar_mapped}" 1>/dev/null; then
     set +x
     echo "Failed to create remapped jar!!!"
     exit 1
   fi
   set +x
 fi
-
-unset JDK_DOWNLOAD_DIR
-unset JDK_EXTRACT_DIR
