@@ -6,6 +6,8 @@
 
 # Do not run this script directly
 
+set -u
+
 PS1="$"
 WORKING_DIR="$1"
 
@@ -33,7 +35,9 @@ if [[ ! -f "${wget_dir}/server.jar" ]]; then
   fi
 fi
 
+set -e
 cp "${wget_dir}/server.jar" "${decompilation_server_jar}"
+set +e
 
 # OS X & FreeBSD don't have md5sum, just md5 -r
 command -v md5sum >/dev/null 2>&1 || {

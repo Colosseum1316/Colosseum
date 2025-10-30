@@ -6,6 +6,8 @@
 
 # Do not run this script directly
 
+set -u
+
 PS1="$"
 WORKING_DIR="$1"
 

@@ -6,6 +6,8 @@
 
 # Do not run this script directly
 
+set -u
+
 PS1="$"
 WORKING_DIR="$1"
 
@@ -116,7 +118,7 @@ echo -e "mc-dev Imports" | git commit . -q -F -
   applyPatch "Panda/base/Paper/PaperSpigot-API" "Panda/PandaSpigot-API" HEAD "Panda/patches/api" &&
   applyPatch "Panda/base/Paper/PaperSpigot-Server" "Panda/PandaSpigot-Server" HEAD "Panda/patches/server"
 ) || (
-  echo "Failed to apply PandaSpigot Patches"
+  echo "Failed to apply PandaSpigot Patches!!!"
   exit 1
 ) || exit 1
 
@@ -126,6 +128,6 @@ cd "${WORKING_DIR}"
   applyPatch "Panda/PandaSpigot-API" "ColosseumSpigot-API" HEAD "patches/api" &&
   applyPatch "Panda/PandaSpigot-Server" "ColosseumSpigot-Server" HEAD "patches/server"
 ) || (
-  echo "Failed to apply ColosseumSpigot Patches"
+  echo "Failed to apply ColosseumSpigot Patches!!!"
   exit 1
 ) || exit 1
