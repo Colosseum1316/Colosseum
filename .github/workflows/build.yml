@@ -93,11 +93,19 @@ jobs:
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v5
-        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          name: ColosseumSpigot-API-${{ github.run_id }}-java-${{ matrix.java-version }}
+          path: |
+            ./ColosseumSpigot-API/target/*.jar
+          retention-days: 1
+          overwrite: true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
         with:
           name: ColosseumSpigot-${{ github.run_id }}-java-${{ matrix.java-version }}
           path: |
             ./ColosseumSpigot-Server/target/*.jar
-            ./ColosseumSpigot-API/target/*.jar
           retention-days: 1
           overwrite: true
