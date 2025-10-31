@@ -54,7 +54,7 @@ jobs:
     name: Build jar on Java ${{ matrix.java-version }}
     strategy:
       matrix:
-        java-version: [17, 21]
+        java-version: [17, 21, 25]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
