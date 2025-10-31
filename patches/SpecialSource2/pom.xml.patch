@@ -1,0 +1,11 @@
+--- pom.xml	2025-10-29 10:58:36.757943327 +0800
++++ pom.xml	2025-10-29 11:04:39.937340209 +0800
+@@ -33,7 +33,7 @@
+         <dependency>
+             <groupId>org.ow2.asm</groupId>
+             <artifactId>asm-commons</artifactId>
+-            <version>9.1</version>
++            <version>9.8</version>
+         </dependency>
+     </dependencies>
+ 

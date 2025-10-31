@@ -19,6 +19,24 @@ on:
       - "!.gitignore"
       - "!LICENSE"
       - "!README.md"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "Panda"
+      - "patches/api/*.patch"
+      - "patches/server/*.patch"
+      - "patches/SpecialSource/*.patch"
+      - "patches/SpecialSource2/*.patch"
+      - "SpecialSource"
+      - "SpecialSource2"
+      - ".gitmodules"
+      - "*.sh"
+      - "pom.xml"
+      - "!.idea"
+      - "!.gitignore"
+      - "!LICENSE"
+      - "!README.md"
   workflow_dispatch:
 
 
@@ -38,7 +56,7 @@ jobs:
       matrix:
         java-version: [17, 21]
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,13 +74,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: corretto
           java-version: ${{ matrix.java-version }}
-
-      - name: Setup Maven
-        uses: stCarolas/setup-maven@v5
-        with:
-          maven-version: 3.8.7
 
       - name: Build Spigot
         run: |
@@ -71,9 +84,28 @@ jobs:
           ./apply.sh
 
       - name: Publish package
-        if: ${{ ((github.ref_name == 'master' && github.event_name == 'push') || github.event_name == 'workflow_dispatch') && matrix.java-version == '17' }}
+        if: ${{ github.ref_name == 'master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && matrix.java-version == '17' }}
         run: ./publish.sh
         env:
           COLOSSEUM_MAVEN_URL: ${{ secrets.COLOSSEUM_MAVEN }}
           COLOSSEUM_MAVEN_USERNAME: ${{ secrets.COLOSSEUM_MAVEN_USERNAME }}
           COLOSSEUM_MAVEN_PASSWORD: ${{ secrets.COLOSSEUM_MAVEN_PASSWORD }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: ColosseumSpigot-API-${{ github.run_id }}-java-${{ matrix.java-version }}
+          path: |
+            ./ColosseumSpigot-API/target/*.jar
+          retention-days: 1
+          overwrite: true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v5
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
+        with:
+          name: ColosseumSpigot-${{ github.run_id }}-java-${{ matrix.java-version }}
+          path: |
+            ./ColosseumSpigot-Server/target/*.jar
+          retention-days: 1
+          overwrite: true
