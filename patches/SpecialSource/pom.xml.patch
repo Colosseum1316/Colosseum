@@ -1,5 +1,5 @@
---- pom.xml	2025-08-13 02:03:01.464366227 +0800
-+++ pom.xml	2025-08-13 21:18:10.339045118 +0800
+--- pom.xml	2025-10-31 11:28:54.645235000 +0800
++++ pom.xml	2025-10-31 11:50:19.576312481 +0800
 @@ -2,12 +2,6 @@
  <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
      <modelVersion>4.0.0</modelVersion>
@@ -24,7 +24,14 @@
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
      </properties>
  
-@@ -51,7 +45,7 @@
+@@ -45,13 +39,13 @@
+         <dependency>
+             <groupId>org.ow2.asm</groupId>
+             <artifactId>asm-commons</artifactId>
+-            <version>9.1</version>
++            <version>9.9</version>
+             <scope>compile</scope>
+         </dependency>
          <dependency>
              <groupId>org.projectlombok</groupId>
              <artifactId>lombok</artifactId>
@@ -78,3 +85,28 @@
                  </configuration>
              </plugin>
              <plugin>
+@@ -139,4 +144,24 @@
+             </plugin>
+         </plugins>
+     </build>
++
++    <profiles>
++        <profile>
++            <id>jdk-21-plus</id>
++            <activation>
++                <jdk>[21,)</jdk>
++            </activation>
++            <build>
++                <plugins>
++                    <plugin>
++                        <groupId>org.apache.maven.plugins</groupId>
++                        <artifactId>maven-compiler-plugin</artifactId>
++                        <configuration>
++                            <proc>full</proc>
++                        </configuration>
++                    </plugin>
++                </plugins>
++            </build>
++        </profile>
++    </profiles>
+ </project>
