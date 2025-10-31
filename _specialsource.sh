@@ -27,8 +27,6 @@ cd "${WORKING_DIR}/SpecialSource2"
 git reset --hard $SPECIALSOURCE2_GIT_REF
 git clean -fd
 patch _specialsource_2_decompile.sh < "${WORKING_DIR}/patches/SpecialSource2/_specialsource_2_decompile.sh.patch"
-patch _specialsource_2_patch.sh < "${WORKING_DIR}/patches/SpecialSource2/_specialsource_2_patch.sh.patch"
-patch ss2/pom.xml < "${WORKING_DIR}/patches/SpecialSource2/pom.xml.patch"
 ./build.sh
 rm -rf "${wget_dir}/SpecialSource-2.jar"
 cp "ss2/target/SpecialSource-2.jar" "${wget_dir}/SpecialSource-2.jar"
