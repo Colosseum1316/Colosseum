@@ -12,3 +12,10 @@ rm -rf SpecialSource2
 rm -rf ColosseumSpigot-API
 rm -rf ColosseumSpigot-Server
 rm -rf mc-dev
+
+set -e
+
+alias git="git -c commit.gpgsign=false"
+git submodule update --init -- SpecialSource SpecialSource2 Panda
+
+set +e
