@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
-Date: Sun, 26 Oct 2025 16:45:10 +0800
+Date: Fri, 31 Oct 2025 12:43:46 +0800
 Subject: [PATCH] Add POM
 
 
@@ -165,7 +165,7 @@ index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..00000000000000000000000000000000
 -}
 diff --git a/pom.xml b/pom.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..605c2404849a53f48446fa25bcb29deb696d10cd
+index 0000000000000000000000000000000000000000..dbe8e96c3406bb4a6cb723b7b009d8190f5b5346
 --- /dev/null
 +++ b/pom.xml
 @@ -0,0 +1,352 @@
@@ -189,8 +189,8 @@ index 0000000000000000000000000000000000000000..605c2404849a53f48446fa25bcb29deb
 +        <nms.version>1_8_R3</nms.version>
 +        <adventure.version>4.24.0</adventure.version> <!-- PandaSpigot - Adventure -->
 +        <log4j.version>2.24.3</log4j.version>
-+        <maven.compiler.source>17</maven.compiler.source>
-+        <maven.compiler.target>17</maven.compiler.target>
++        <maven.compiler.source>1.8</maven.compiler.source>
++        <maven.compiler.target>1.8</maven.compiler.target>
 +        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 +    </properties>
 +
