@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Wed, 29 Oct 2025 11:23:15 +0800
+Subject: [PATCH] Set settings.sample-count to 0 by default
+
+
+diff --git a/src/main/java/net/minecraft/server/PacketStatusListener.java b/src/main/java/net/minecraft/server/PacketStatusListener.java
+index e4bff04ac4b817f92a6a2ab6ab4e7afa6e9576bd..a4826bed255c921860c6a3c8b6c9d4635337260e 100644
+--- a/src/main/java/net/minecraft/server/PacketStatusListener.java
++++ b/src/main/java/net/minecraft/server/PacketStatusListener.java
+@@ -108,11 +108,17 @@ public class PacketStatusListener implements PacketStatusInListener {
+         }
+ 
+         ServerPing.ServerPingPlayerSample playerSample = new ServerPing.ServerPingPlayerSample(event.getMaxPlayers(), profiles.size());
++        // ColosseumSpigot start
++        int samSub = Math.min( profiles.size(), org.spigotmc.SpigotConfig.playerSample );
++        if ( samSub <= 0 ) {
++            profiles.clear();
++        }
++        // ColosseumSpigot end
+         // Spigot Start
+         if ( !profiles.isEmpty() )
+         {
+             java.util.Collections.shuffle( profiles ); // This sucks, its inefficient but we have no simple way of doing it differently
+-            profiles = profiles.subList( 0, Math.min( profiles.size(), org.spigotmc.SpigotConfig.playerSample ) ); // Cap the sample to n (or less) displayed players, ie: Vanilla behaviour
++            profiles = profiles.subList( 0, samSub ); // Cap the sample to n (or less) displayed players, ie: Vanilla behaviour
+         }
+         // Spigot End
+         playerSample.a(profiles.toArray(new GameProfile[profiles.size()]));
+diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
+index 8e4cd53f82dbd72e6ba6d45d93ba66e3b9e5720b..6ac23e58590df72071c58c8fabe6b010da942562 100644
+--- a/src/main/java/org/spigotmc/SpigotConfig.java
++++ b/src/main/java/org/spigotmc/SpigotConfig.java
+@@ -329,7 +329,7 @@ public class SpigotConfig
+     public static int playerSample;
+     private static void playerSample()
+     {
+-        playerSample = getInt( "settings.sample-count", 12 );
++        playerSample = getInt( "settings.sample-count", 0 );
+         System.out.println( "Server Ping Player Sample Count: " + playerSample );
+     }
+ 

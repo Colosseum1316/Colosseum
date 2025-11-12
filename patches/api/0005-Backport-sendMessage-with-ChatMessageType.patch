@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Thu, 25 Sep 2025 14:26:43 +0800
+Subject: [PATCH] Backport sendMessage with ChatMessageType
+
+Reference: https://hub.spigotmc.org/stash/projects/SPIGOT/repos/spigot/commits/7c52c662ccee93e52a21c54a1b8f93721e4ec773
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 72b84b584a65b4a26d856ab48272cc711de098dd..d18c8d2e96aa1e1b0ff95cb1a37beb5b7608383a 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -1375,6 +1375,28 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
+             throw new UnsupportedOperationException("Not supported yet.");
+         }
+ 
++        // ColosseumSpigot start
++        /**
++         * Sends the component to the specified screen position of this player
++         *
++         * @param position the screen position
++         * @param component the components to send
++         */
++        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent component) {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++
++        /**
++         * Sends an array of components as a single message to the specified screen position of this player
++         *
++         * @param position the screen position
++         * @param components the components to send
++         */
++        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++        // ColosseumSpigot end
++
+         /**
+          * Get whether the player affects mob spawning
+          *

@@ -1,0 +1,58 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Fri, 31 Oct 2025 12:53:24 +0800
+Subject: [PATCH] Backport sendMessage with ChatMessageType
+
+Reference: https://hub.spigotmc.org/stash/projects/SPIGOT/repos/spigot/commits/7c52c662ccee93e52a21c54a1b8f93721e4ec773
+
+diff --git a/src/main/java/net/minecraft/server/PacketPlayOutChat.java b/src/main/java/net/minecraft/server/PacketPlayOutChat.java
+index 48fcdafeb56f5cae5361d3981170d58c0b5b717b..d08b6be96311a8b6381b000113f8ba0d122ab1cc 100644
+--- a/src/main/java/net/minecraft/server/PacketPlayOutChat.java
++++ b/src/main/java/net/minecraft/server/PacketPlayOutChat.java
+@@ -11,6 +11,12 @@ public class PacketPlayOutChat implements Packet<PacketListenerPlayOut> {
+ 
+     public PacketPlayOutChat() {}
+ 
++    // ColosseumSpigot start
++    public PacketPlayOutChat(byte b0) {
++        this.b = b0;
++    }
++    // ColosseumSpigot end
++
+     public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent) {
+         this(ichatbasecomponent, (byte) 1);
+     }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 75da9ba8a6333097c34bc38e680975f2ffb86043..300697d235fec28b9381645a522ce1ee7227a157 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1719,6 +1719,29 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+             getHandle().playerConnection.sendPacket(packet);
+         }
+ 
++        // ColosseumSpigot start
++        @Override
++        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, BaseComponent component) {
++            sendMessage(position, new BaseComponent[] { component });
++        }
++
++        @Override
++        public void sendMessage(net.md_5.bungee.api.ChatMessageType position, BaseComponent... components) {
++            if (getHandle().playerConnection == null) {
++                return;
++            }
++            byte b0 = 0;
++            switch (position) {
++                case CHAT: b0 = 0; break;
++                case SYSTEM: b0 = 1; break;
++                case ACTION_BAR: b0 = 2; break;
++            }
++            PacketPlayOutChat packet = new PacketPlayOutChat(b0);
++            packet.components = components;
++            getHandle().playerConnection.sendPacket(packet);
++        }
++        // ColosseumSpigot end
++
+         // PaperSpigot start - Implement affects spawning API
+         @Override
+         public boolean getAffectsSpawning() {

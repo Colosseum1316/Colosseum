@@ -1,0 +1,112 @@
+--- pom.xml	2025-10-31 11:28:54.645235000 +0800
++++ pom.xml	2025-10-31 11:50:19.576312481 +0800
+@@ -2,12 +2,6 @@
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+ 
+-    <parent>
+-        <groupId>org.sonatype.oss</groupId>
+-        <artifactId>oss-parent</artifactId>
+-        <version>9</version>
+-    </parent>
+-
+     <groupId>net.md-5</groupId>
+     <artifactId>SpecialSource</artifactId>
+     <version>1.10.0</version>
+@@ -36,8 +30,8 @@
+     </issueManagement>
+ 
+     <properties>
+-        <maven.compiler.source>1.7</maven.compiler.source>
+-        <maven.compiler.target>1.7</maven.compiler.target>
++        <maven.compiler.source>1.8</maven.compiler.source>
++        <maven.compiler.target>1.8</maven.compiler.target>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     </properties>
+ 
+@@ -45,13 +39,13 @@
+         <dependency>
+             <groupId>org.ow2.asm</groupId>
+             <artifactId>asm-commons</artifactId>
+-            <version>9.1</version>
++            <version>9.9</version>
+             <scope>compile</scope>
+         </dependency>
+         <dependency>
+             <groupId>org.projectlombok</groupId>
+             <artifactId>lombok</artifactId>
+-            <version>1.18.20</version>
++            <version>1.18.38</version>
+             <scope>provided</scope>
+         </dependency>
+         <dependency>
+@@ -98,12 +92,23 @@
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-compiler-plugin</artifactId>
++                <version>3.14.0</version>
++                <configuration>
++                    <source>${maven.compiler.source}</source>
++                    <target>${maven.compiler.target}</target>
++                </configuration>
++            </plugin>
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-jar-plugin</artifactId>
+-                <version>3.1.0</version>
++                <version>3.4.2</version>
+                 <configuration>
++                    <finalName>${project.name}</finalName>
+                     <archive>
+                         <manifestEntries>
+                             <Main-Class>net.md_5.specialsource.SpecialSource</Main-Class>
++                            <Built-By></Built-By>
+                         </manifestEntries>
+                     </archive>
+                 </configuration>
+@@ -111,7 +116,7 @@
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-shade-plugin</artifactId>
+-                <version>3.1.1</version>
++                <version>3.6.0</version>
+                 <executions>
+                     <execution>
+                         <phase>package</phase>
+@@ -121,8 +126,8 @@
+                     </execution>
+                 </executions>
+                 <configuration>
+-                    <minimizeJar>true</minimizeJar>
+-                    <shadedArtifactAttached>true</shadedArtifactAttached>
++                    <minimizeJar>false</minimizeJar>
++                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                 </configuration>
+             </plugin>
+             <plugin>
+@@ -139,4 +144,24 @@
+             </plugin>
+         </plugins>
+     </build>
++
++    <profiles>
++        <profile>
++            <id>jdk-21-plus</id>
++            <activation>
++                <jdk>[21,)</jdk>
++            </activation>
++            <build>
++                <plugins>
++                    <plugin>
++                        <groupId>org.apache.maven.plugins</groupId>
++                        <artifactId>maven-compiler-plugin</artifactId>
++                        <configuration>
++                            <proc>full</proc>
++                        </configuration>
++                    </plugin>
++                </plugins>
++            </build>
++        </profile>
++    </profiles>
+ </project>

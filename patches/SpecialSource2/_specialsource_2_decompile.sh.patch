@@ -1,0 +1,42 @@
+--- _specialsource_2_decompile.sh	2025-10-26 18:10:15.867540971 +0800
++++ _specialsource_2_decompile.sh	2025-10-26 18:11:33.350670152 +0800
+@@ -4,7 +4,7 @@
+ BASE_DIR="$1"
+ WORKING_DIR="$1"
+ 
+-wget_dir="${WORKING_DIR}/tmp"
++wget_dir="${WORKING_DIR}/../tmp"
+ decompilation_dir="${wget_dir}/dec"
+ mkdir -p "${decompilation_dir}" || true
+ output_dir="${WORKING_DIR}/ss2/src"
+@@ -33,24 +33,24 @@
+   fi
+ }
+ 
+-ss2_script_download_file "fernflower.jar" "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/bin/fernflower.jar?at=838b40587fa7a68a130b75252959bc8a3481d94f" "29359771a5722c7f45ce723d567a86ae18cba7a72ee6ca7bd785235004aa1610"
+-ss2_script_download_file "SpecialSource-2.jar" "https://github.com/hpfxd/PandaSpigot/raw/refs/heads/master/bin/SpecialSource-2.jar" "fc740dbb230c659df710084d0822b4a20d910bf707d6e66f935351bedf4e8bba"
++ss2_script_download_file "fernflower-ss.jar" "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/bin/fernflower.jar?at=838b40587fa7a68a130b75252959bc8a3481d94f" "29359771a5722c7f45ce723d567a86ae18cba7a72ee6ca7bd785235004aa1610"
++ss2_script_download_file "SpecialSource-2-Panda.jar" "https://github.com/hpfxd/PandaSpigot/raw/refs/heads/master/bin/SpecialSource-2.jar" "fc740dbb230c659df710084d0822b4a20d910bf707d6e66f935351bedf4e8bba"
+ 
+ rm -rf "${output_dir}"
+ rm -rf "${output_dir}/../target"
+ mkdir -p "${output_dir}/net/md_5/ss"
+ 
+ cd "${decompilation_dir}"
+-cp "${wget_dir}/SpecialSource-2.jar" .
+-jar xvf SpecialSource-2.jar
+-rm -rf SpecialSource-2.jar
++cp "${wget_dir}/SpecialSource-2-Panda.jar" .
++jar xf SpecialSource-2-Panda.jar
++rm -rf SpecialSource-2-Panda.jar
+ rm -rf com
+ rm -rf joptsimple
+ rm -rf META-INF
+ rm -rf org
+ java -version
+ set -x
+-java -jar "${wget_dir}/fernflower.jar" -den=1 -dgs=1 -hdc=0 -rbr=0 -asc=1 -udv=0 "net/md_5/ss" "${output_dir}/net/md_5/ss"
++java -jar "${wget_dir}/fernflower-ss.jar" -den=1 -dgs=1 -hdc=0 -rbr=0 -asc=1 -udv=0 "net/md_5/ss" "${output_dir}/net/md_5/ss"
+ set +x
+ rm -rf ${decompilation_dir}
+ 

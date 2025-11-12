@@ -1,0 +1,12 @@
+*.iml
+*.DS_Store
+run/
+.gradle/
+build/
+.kotlin/
+mc-dev/
+tmp/
+/SpecialSource
+/SpecialSource2
+/Panda
+.idea

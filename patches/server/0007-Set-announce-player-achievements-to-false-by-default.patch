@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Tue, 9 Sep 2025 11:27:15 +0800
+Subject: [PATCH] Set announce-player-achievements to false by default
+
+
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index ce0c2cebe9915dc6f88110681fe93899f0382ff0..44f6e6ec21e28b17e05c4be5fc482e8a84ada70a 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -546,7 +546,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+     }
+ 
+     public boolean aB() {
+-        return this.propertyManager.getBoolean("announce-player-achievements", true);
++        return this.propertyManager.getBoolean("announce-player-achievements", false);
+     }
+ 
+     public int aI() {

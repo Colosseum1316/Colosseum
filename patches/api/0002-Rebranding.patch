@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Thu, 17 Jul 2025 23:26:40 +0800
+Subject: [PATCH] Rebranding
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 4ae094a9d190e23efcebd866a8ecb11ebf9167e6..aa0b1d92be7efe801003ed9d08dc09bf962df463 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -78,23 +78,16 @@ public final class Bukkit {
+         Bukkit.server = server;
+         server.getLogger().info(getVersionMessage()); // PandaSpigot - Use Bukkit.getVersionMessage
+     }
+-    // PandaSpigot start
++    // ColosseumSpigot start
+     /**
+      * Gets message describing the version server is running.
+      *
+      * @return message describing the version server is running
+      */
+     public static String getVersionMessage() {
+-        final java.util.jar.Manifest manifest = io.papermc.paper.util.JarManifests.manifest(Bukkit.getServer().getClass());
+-        final String gitBranch = manifest == null ? null : manifest.getMainAttributes().getValue("Git-Branch");
+-        final String gitCommit = manifest == null ? null : manifest.getMainAttributes().getValue("Git-Commit");
+-        String branchMsg = " on " + gitBranch;
+-        if ("master".equals(gitBranch) || "main".equals(gitBranch)) {
+-            branchMsg = "";  // Don't show branch on main/master
+-        }
+-        return "This server is running " + getName() + " version " + getVersion() + " (Implementing API version " + getBukkitVersion() + ") (Git: " + gitCommit + branchMsg + ")";
++        return "This server is running " + getName() + " version " + getVersion() + " (Implementing API version " + getBukkitVersion() + ")";
+     }
+-    // PandaSpgiot end
++    // ColosseumSpigot end
+ 
+     /**
+      * Gets the name of this server implementation.

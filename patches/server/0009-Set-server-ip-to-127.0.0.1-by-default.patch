@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Tue, 9 Sep 2025 11:39:48 +0800
+Subject: [PATCH] Set server-ip to 127.0.0.1 by default
+
+
+diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
+index d861937d0f3e3a02b2fd53f6c10e830ee161dcfe..de23eb6f470d2fd7e4800237faf1a3a00fe17b44 100644
+--- a/src/main/java/net/minecraft/server/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/DedicatedServer.java
+@@ -153,7 +153,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+                 this.c("127.0.0.1");
+             } else {
+                 this.setOnlineMode(this.propertyManager.getBoolean("online-mode", true));
+-                this.c(this.propertyManager.getString("server-ip", ""));
++                this.c(this.propertyManager.getString("server-ip", "127.0.0.1"));
+             }
+ 
+             this.setSpawnAnimals(this.propertyManager.getBoolean("spawn-animals", true));
+@@ -161,7 +161,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
+             this.setPVP(this.propertyManager.getBoolean("pvp", true));
+             this.setAllowFlight(this.propertyManager.getBoolean("allow-flight", false));
+             this.setResourcePack(this.propertyManager.getString("resource-pack", ""), this.propertyManager.getString("resource-pack-hash", ""));
+-            this.setMotd(this.propertyManager.getString("motd", "A Minecraft Server"));
++            this.setMotd(this.propertyManager.getString("motd", ""));
+             this.setForceGamemode(this.propertyManager.getBoolean("force-gamemode", true));
+             this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
+             if (this.propertyManager.getInt("difficulty", 1) < 0) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index f4fe06e9117d248bb112fbeed3c2d8460e6b42b5..6cc7051fe2524466da05056276cbefb7188a31c6 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -532,7 +532,7 @@ public final class CraftServer implements Server {
+ 
+     @Override
+     public String getIp() {
+-        return this.getConfigString("server-ip", "");
++        return this.getConfigString("server-ip", "127.0.0.1");
+     }
+ 
+     @Override

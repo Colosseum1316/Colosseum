@@ -1,0 +1,16 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Thu, 17 Jul 2025 19:08:02 +0800
+Subject: [PATCH] Remove VersionCommand
+
+
+diff --git a/src/main/resources/configurations/commands.yml b/src/main/resources/configurations/commands.yml
+index 733307c288f186868ef41b1d1582d082c4b3d8ca..cc5bed2f3c9dbdfe5ad1c407a0b5c81ba90d275e 100644
+--- a/src/main/resources/configurations/commands.yml
++++ b/src/main/resources/configurations/commands.yml
+@@ -12,5 +12,3 @@
+ 
+ command-block-overrides: []
+ aliases:
+-    icanhasbukkit:
+-      - "version $1-"
