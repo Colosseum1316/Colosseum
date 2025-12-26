@@ -76,6 +76,8 @@ case "$1" in
   ;;
 esac
 
+_init
+
 minecraft_version="$(cat "${SCRIPT_DIR}/Panda/base/Paper/BuildData/info.json" | grep minecraftVersion | cut -d '"' -f 4)"
 minecraft_server_jar_download_url="https://launcher.mojang.com/v1/objects/5fafba3f58c40dc51b5c3ca72a98f62dfdae1db7/server.jar"
 minecraft_server_jar_hash=$(cat "${SCRIPT_DIR}/Panda/base/Paper/BuildData/info.json" | grep minecraftHash | cut -d '"' -f 4)
