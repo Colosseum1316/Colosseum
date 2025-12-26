@@ -1,16 +1,16 @@
 ## Features
 
-- Based on PandaSpigot
-- Upgraded SpecialSource and SpecialSource-2
 - Java 21 support
+- Based on PandaSpigot
+- Using upgraded SpecialSource and SpecialSource-2
 
 ## Prerequisites
 
-- Maven 3
+- Gradle 8
 
 ## Usage
 
-- Compile: `./apply.sh`
-- Retry: `./reset.sh && ./apply.sh`
-- Regenerate patches: `./reconstruct.sh`
-- Retry from scratch: `./full-reset.sh && ./apply.sh`
+- Compile: `./colosseum.sh b`
+- Retry: `./colosseum.sh r && ./colosseum.sh b`
+- Regenerate patches: `./colosseum.sh rp`
+- Retry from scratch: `./colosseum.sh fr && ./colosseum.sh b`

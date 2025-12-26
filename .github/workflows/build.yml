@@ -5,6 +5,8 @@ on:
     branches:
       - master
     paths:
+      - "!.idea"
+      - "build-logic"
       - "Panda"
       - "patches/api/*.patch"
       - "patches/server/*.patch"
@@ -12,16 +14,18 @@ on:
       - "patches/SpecialSource2/*.patch"
       - "SpecialSource"
       - "SpecialSource2"
+      - "!.gitignore"
       - ".gitmodules"
       - "colosseum.sh"
-      - "!.idea"
-      - "!.gitignore"
       - "!LICENSE"
       - "!README.md"
+      - "settings.gradle.kts"
   pull_request:
     branches:
       - master
     paths:
+      - "!.idea"
+      - "build-logic"
       - "Panda"
       - "patches/api/*.patch"
       - "patches/server/*.patch"
@@ -29,12 +33,12 @@ on:
       - "patches/SpecialSource2/*.patch"
       - "SpecialSource"
       - "SpecialSource2"
+      - "!.gitignore"
       - ".gitmodules"
       - "colosseum.sh"
-      - "!.idea"
-      - "!.gitignore"
       - "!LICENSE"
       - "!README.md"
+      - "settings.gradle.kts"
   workflow_dispatch:
 
 
@@ -86,8 +90,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: ColosseumSpigot-API-${{ github.run_id }}-java-${{ matrix.java-version }}
-          path: |
-            ./ColosseumSpigot-API/target/*.jar
+          path: ./ColosseumSpigot-API/build/libs/*.jar
           retention-days: 1
           overwrite: true
 
@@ -96,7 +99,6 @@ jobs:
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
         with:
           name: ColosseumSpigot-${{ github.run_id }}-java-${{ matrix.java-version }}
-          path: |
-            ./ColosseumSpigot-Server/target/*.jar
+          path: ./ColosseumSpigot-Server/build/libs/*.jar
           retention-days: 1
           overwrite: true
