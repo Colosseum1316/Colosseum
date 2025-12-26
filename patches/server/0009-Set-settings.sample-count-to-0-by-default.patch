@@ -28,10 +28,10 @@ index e4bff04ac4b817f92a6a2ab6ab4e7afa6e9576bd..a4826bed255c921860c6a3c8b6c9d463
          // Spigot End
          playerSample.a(profiles.toArray(new GameProfile[profiles.size()]));
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index 8e4cd53f82dbd72e6ba6d45d93ba66e3b9e5720b..6ac23e58590df72071c58c8fabe6b010da942562 100644
+index ccc427c003212f6b3954f3a92c1b43d3db490b56..8e9d584eade9a4989b4e717d44d3cde2f9dad38d 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
-@@ -329,7 +329,7 @@ public class SpigotConfig
+@@ -328,7 +328,7 @@ public class SpigotConfig
      public static int playerSample;
      private static void playerSample()
      {

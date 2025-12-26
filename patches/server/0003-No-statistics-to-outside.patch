@@ -855,7 +855,7 @@ index 9134394542f49f7c400a4a07b649048899694448..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index e6b5484518d0e37772850ab5452026e5c1e8e6fb..e8c1d3198ff3200ff3ae9f82523a41c5b7da80b6 100644
+index 8a302b2678916f862cac0c020fa3247043204e6a..ea642606804c40b43bc447f295617b7c92f4a249 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -182,7 +182,6 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -878,7 +878,7 @@ index e6b5484518d0e37772850ab5452026e5c1e8e6fb..e8c1d3198ff3200ff3ae9f82523a41c5
          this.l.add(new ServerCommand(s, icommandlistener));
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 7c3a5a4adc3fdf8fb269be3d52e88fa269573bb0..e2e97b477e2acd6609808f58dc2cc31469d83bf4 100644
+index 0f3e614233a2c10ceae6164faef612671729214e..888a490831429c377802d029fa9c1719ea8af36a 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1422,8 +1422,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs

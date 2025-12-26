@@ -27,7 +27,7 @@ index d861937d0f3e3a02b2fd53f6c10e830ee161dcfe..de23eb6f470d2fd7e4800237faf1a3a0
              this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
              if (this.propertyManager.getInt("difficulty", 1) < 0) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f4fe06e9117d248bb112fbeed3c2d8460e6b42b5..6cc7051fe2524466da05056276cbefb7188a31c6 100644
+index 6522920604da6fa859a55874000394011227e30e..d6ffec95387ef8b24c0b83a79fa915ac23720600 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -532,7 +532,7 @@ public final class CraftServer implements Server {
