@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Fri, 26 Dec 2025 22:29:59 +0800
+Subject: [PATCH] Configure Gradle
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 3802f6e3275dc62f39a1d17d1459d89902d1954b..2a703e055ab08568e5e2ddb4607a6a14dee89265 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -95,26 +95,6 @@ publishing {
+             }
+ 
+             pom {
+-                url.set("https://github.com/hpfxd/PandaSpigot")
+-                description.set(project.description)
+-                name.set(project.name)
+-                // if this is a CI build, set version as the run id
+-                System.getenv("GITHUB_RUN_NUMBER").let { if (it != null) version = it }
+-
+-                developers {
+-                    developer {
+-                        id.set("hpfxd")
+-                        name.set("Nate")
+-                        email.set("me@hpfxd.com")
+-                    }
+-                }
+-
+-                scm {
+-                    connection.set("scm:git:git://github.com/hpfxd/PandaSpigot.git")
+-                    developerConnection.set("scm:git:git://github.com/hpfxd/PandaSpigot.git")
+-                    url.set("https://github.com/hpfxd/PandaSpigot")
+-                }
+-
+                 licenses {
+                     license {
+                         name.set("GPL-v3.0")
+@@ -125,17 +105,17 @@ publishing {
+         }
+     }
+ 
+-    (System.getenv("REPO_USERNAME") ?: findProperty("repository.hpfxd.username")).let { repoUsername ->
++    System.getenv("COLOSSEUM_MAVEN_USERNAME").let { repoUsername ->
+         if (repoUsername == null) return@let // don't declare repository if username not declared
+ 
+         repositories {
+             maven {
+-                name = "hpfxd-repo"
+-                url = uri("https://repo.hpfxd.com/releases/")
++                name = "coffeewarehouse"
++                url = uri(System.getenv("COLOSSEUM_MAVEN_URL"))
+ 
+                 credentials {
+                     username = repoUsername as String
+-                    password = System.getenv("REPO_PASSWORD") ?: findProperty("repository.hpfxd.password") as String
++                    password = System.getenv("COLOSSEUM_MAVEN_PASSWORD") as String
+                 }
+             }
+         }
