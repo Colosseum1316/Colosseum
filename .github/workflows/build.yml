@@ -79,6 +79,7 @@ jobs:
         with:
           distribution: corretto
           java-version: ${{ matrix.java-version }}
+          cache: gradle
 
       - name: Build Spigot
         run: |

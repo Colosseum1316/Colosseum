@@ -432,7 +432,7 @@ case "$1" in
   "b" | "build")
   colosseum_minecraft_decompile ;
   colosseum_minecraft_apply_patch ;
-  ./gradlew build
+  ./gradlew test build
   ;;
   "_d" | "_decompile")
   colosseum_minecraft_decompile ;

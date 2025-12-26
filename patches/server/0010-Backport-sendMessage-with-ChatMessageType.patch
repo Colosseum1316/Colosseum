@@ -23,10 +23,10 @@ index 48fcdafeb56f5cae5361d3981170d58c0b5b717b..d08b6be96311a8b6381b000113f8ba0d
          this(ichatbasecomponent, (byte) 1);
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 75da9ba8a6333097c34bc38e680975f2ffb86043..300697d235fec28b9381645a522ce1ee7227a157 100644
+index 09ec7de882201fe89323f8ff67e7e76128f8ae1e..4c0f3d8c1f5cf4914ddffe86c40663128bb7aa83 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1719,6 +1719,29 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1721,6 +1721,29 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              getHandle().playerConnection.sendPacket(packet);
          }
  
