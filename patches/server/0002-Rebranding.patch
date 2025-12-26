@@ -39,7 +39,7 @@ index 0c6cdfed088a26380e6fe7052e747efeedda7b1e..f9d292fb0b50adc56f651c9f1fc7cfe2
  public final class CraftServer implements Server {
      private static final Player[] EMPTY_PLAYER_ARRAY = new Player[0];
 -    private final String serverName = "PandaSpigot"; // PandaSpigot
-+    private final String serverName = "Colosseum"; // ColosseumSpigot
++    private final String serverName = "ColosseumSpigot"; // ColosseumSpigot
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
