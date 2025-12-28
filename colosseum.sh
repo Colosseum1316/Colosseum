@@ -298,7 +298,7 @@ function colosseum_minecraft_apply_patch {
 
 function _prepare_specialsource {
   local SPECIALSOURCE_GIT_REF=b140ee56f3d8c7c9b6ecf559cf091a543e0c762c
-  local SPECIALSOURCE2_GIT_REF=8f18814b67c21cbd31db057a4253ec261e9633bb
+  local SPECIALSOURCE2_GIT_REF=e55310a7336b80a14817bfdf3230dcd7386374be
 
   cd ${SCRIPT_DIR}
 
