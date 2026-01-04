@@ -1,0 +1,3 @@
+gradlew.bat linguist-generated
+gradlew linguist-generated
+gradle/wrapper/** linguist-generated
