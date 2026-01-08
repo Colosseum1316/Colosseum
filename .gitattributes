@@ -1,3 +1,5 @@
 gradlew.bat linguist-generated
 gradlew linguist-generated
 gradle/wrapper/** linguist-generated
+patches/api/** linguist-generated
+patches/server/** linguist-generated
