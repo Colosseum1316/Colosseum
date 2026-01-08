@@ -18,7 +18,7 @@ index 25a515b681bbbb70946f2ec73647a6f184f81b3c..776cdc4c217660ba3e42faf9783c5c59
              .completer(new PandaConsoleCompleter(this.server)));
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 251398d0b18243d2ebd82b882e3acf50c03f387c..7c3a5a4adc3fdf8fb269be3d52e88fa269573bb0 100644
+index 59464fbb8c611208197d1a4949eed660270311f1..0f3e614233a2c10ceae6164faef612671729214e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1170,7 +1170,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
@@ -31,7 +31,7 @@ index 251398d0b18243d2ebd82b882e3acf50c03f387c..7c3a5a4adc3fdf8fb269be3d52e88fa2
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0c6cdfed088a26380e6fe7052e747efeedda7b1e..f9d292fb0b50adc56f651c9f1fc7cfe23576c145 100644
+index 2eac381a825ed0edabd12816432f6d2d655887ef..58a6c20583d61acaa85662052551ac8e51738908 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -127,7 +127,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
@@ -39,7 +39,7 @@ index 0c6cdfed088a26380e6fe7052e747efeedda7b1e..f9d292fb0b50adc56f651c9f1fc7cfe2
  public final class CraftServer implements Server {
      private static final Player[] EMPTY_PLAYER_ARRAY = new Player[0];
 -    private final String serverName = "PandaSpigot"; // PandaSpigot
-+    private final String serverName = "Colosseum"; // ColosseumSpigot
++    private final String serverName = "ColosseumSpigot"; // ColosseumSpigot
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");

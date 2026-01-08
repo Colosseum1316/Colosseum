@@ -5,7 +5,7 @@ Subject: [PATCH] Set default Gamemode to Adventure
 
 
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index 44f6e6ec21e28b17e05c4be5fc482e8a84ada70a..c58846cb30912b8fc59601ce4f302d6f4a163215 100644
+index a282523117c040d303e011ae77449dee68e7c446..d861937d0f3e3a02b2fd53f6c10e830ee161dcfe 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -162,7 +162,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer

@@ -5,7 +5,7 @@ Subject: [PATCH] Disable Nether and The End by default
 
 
 diff --git a/src/main/java/net/minecraft/server/DedicatedServer.java b/src/main/java/net/minecraft/server/DedicatedServer.java
-index e8c1d3198ff3200ff3ae9f82523a41c5b7da80b6..ce0c2cebe9915dc6f88110681fe93899f0382ff0 100644
+index ea642606804c40b43bc447f295617b7c92f4a249..95ca915d4292b3f918452d9315d78a91451a9f23 100644
 --- a/src/main/java/net/minecraft/server/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/DedicatedServer.java
 @@ -413,7 +413,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
@@ -18,7 +18,7 @@ index e8c1d3198ff3200ff3ae9f82523a41c5b7da80b6..ce0c2cebe9915dc6f88110681fe93899
  
      public boolean getSpawnMonsters() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f9d292fb0b50adc56f651c9f1fc7cfe23576c145..8a9b5802ef01a8c89aea457549e4078d5c54f562 100644
+index 98a814601733dac73c9ad27447c13a3d35991f5d..6522920604da6fa859a55874000394011227e30e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -562,7 +562,7 @@ public final class CraftServer implements Server {

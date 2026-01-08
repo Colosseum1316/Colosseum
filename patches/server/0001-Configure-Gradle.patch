@@ -1,0 +1,91 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Thu, 8 Jan 2026 21:23:57 +0800
+Subject: [PATCH] Configure Gradle
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..3b9119e7ca086f00def45a83d81136301e6913aa 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -1,6 +1,7 @@
+ plugins {
+     id("pandaspigot.conventions")
+     id("com.gradleup.shadow") version "9.0.0-beta7"
++    `maven-publish`
+ }
+ 
+ val minecraftVersion = "1_8_R3"
+@@ -11,7 +12,7 @@ repositories {
+ }
+ 
+ dependencies {
+-    implementation(project(":pandaspigot-api"))
++    implementation(project(":colosseumspigot-api"))
+ 
+     // PandaSpigot start - Configuration
+     implementation("com.hpfxd.configurate:configurate-eo-yaml:1.0.0") {
+@@ -53,7 +54,7 @@ dependencies {
+ fun TaskContainer.registerRunTask(
+     name: String, block: JavaExec.() -> Unit
+ ): TaskProvider<JavaExec> = register<JavaExec>(name) {
+-    group = "pandaspigot"
++    group = "colosseumspigot"
+     standardInput = System.`in`
+     workingDir = rootProject.layout.projectDirectory.dir(
+         providers.gradleProperty("runWorkDir").orElse("run")
+@@ -76,7 +77,7 @@ tasks {
+             "com.amihaiemil.eoyaml",
+             "org.spongepowered.configurate",
+             "io.leangen.geantyref",
+-        ).forEach { relocate(it, "com.hpfxd.pandaspigot.libs.$it") }
++        ).forEach { relocate(it, "colosseum.minecraft.colosseumspigot.libs.$it") }
+         // PandaSpigot end
+ 
+         val cbLibsPkg = "org.bukkit.craftbukkit.libs"
+@@ -103,14 +104,14 @@ tasks {
+         archiveClassifier.set("original")
+         manifest {
+             val git = Git(rootProject.layout.projectDirectory)
+-            val gitHash = git("rev-parse", "--short=7", "HEAD").getText().trim()
+-            val implementationVersion = System.getenv("GITHUB_RUN_NUMBER") ?: "\"$gitHash\""
++            val gitHash = git("rev-parse", "--short=9", "HEAD").getText().trim()
++            val implementationVersion = gitHash
+             val date = git("show", "-s", "--format=%ci", gitHash).getText().trim()
+             val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim()
+             attributes(
+                 "Main-Class" to "org.bukkit.craftbukkit.Main",
+                 "Implementation-Title" to "CraftBukkit",
+-                "Implementation-Version" to "git-PandaSpigot-$implementationVersion",
++                "Implementation-Version" to "git-ColosseumSpigot-$implementationVersion",
+                 "Implementation-Vendor" to date,
+                 "Specification-Title" to "Bukkit",
+                 "Specification-Version" to project.version,
+@@ -151,3 +152,27 @@ tasks {
+         dependsOn(named("remap"))
+     }
+ }
++
++publishing {
++    publications {
++        create<MavenPublication>("mavenJava") {
++            artifact(tasks.named("remap"))
++        }
++    }
++
++    System.getenv("COLOSSEUM_MAVEN_USERNAME").let { repoUsername ->
++        if (repoUsername == null) return@let // don't declare repository if username not declared
++
++        repositories {
++            maven {
++                name = "coffeewarehouse"
++                url = uri(System.getenv("COLOSSEUM_MAVEN_URL"))
++
++                credentials {
++                    username = repoUsername
++                    password = System.getenv("COLOSSEUM_MAVEN_PASSWORD") as String
++                }
++            }
++        }
++    }
++}
