@@ -5,7 +5,7 @@ Subject: [PATCH] Configure Gradle
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 3802f6e3275dc62f39a1d17d1459d89902d1954b..2a703e055ab08568e5e2ddb4607a6a14dee89265 100644
+index 3802f6e3275dc62f39a1d17d1459d89902d1954b..f834c9145f9d42f91f7489f090f24d03afe791d6 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -95,26 +95,6 @@ publishing {
@@ -51,8 +51,9 @@ index 3802f6e3275dc62f39a1d17d1459d89902d1954b..2a703e055ab08568e5e2ddb4607a6a14
 +                url = uri(System.getenv("COLOSSEUM_MAVEN_URL"))
  
                  credentials {
-                     username = repoUsername as String
+-                    username = repoUsername as String
 -                    password = System.getenv("REPO_PASSWORD") ?: findProperty("repository.hpfxd.password") as String
++                    username = repoUsername
 +                    password = System.getenv("COLOSSEUM_MAVEN_PASSWORD") as String
                  }
              }

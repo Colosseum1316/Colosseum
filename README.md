@@ -12,5 +12,5 @@
 
 - Compile: `./colosseum.sh b`
 - Retry: `./colosseum.sh r && ./colosseum.sh b`
-- Regenerate patches: `./colosseum.sh rp`
+- Regenerate patches: `./colosseum.sh p`
 - Retry from scratch: `./colosseum.sh fr && ./colosseum.sh b`

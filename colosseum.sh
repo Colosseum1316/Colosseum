@@ -440,7 +440,7 @@ case "$1" in
   "_a" | "_apply_patch")
   colosseum_minecraft_apply_patch ;
   ;;
-  "rp" | "rebuild_patch")
+  "p" | "rebuild_patch")
   colosseum_minecraft_rebuild_patch ;
   ;;
   *)
