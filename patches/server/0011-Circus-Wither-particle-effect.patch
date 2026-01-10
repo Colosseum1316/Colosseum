@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Sat, 10 Jan 2026 18:48:57 +0800
+Subject: [PATCH] Circus - Wither particle effect
+
+
+diff --git a/src/main/java/net/minecraft/server/EntityWither.java b/src/main/java/net/minecraft/server/EntityWither.java
+index fb19bad3c01b03991f9dbaff6041acbccda3c8b3..9a3789705abe6b983650fc3c67dd8c514b97a935 100644
+--- a/src/main/java/net/minecraft/server/EntityWither.java
++++ b/src/main/java/net/minecraft/server/EntityWither.java
+@@ -29,6 +29,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
+             return this.a((Entity) object);
+         }
+     };
++    private boolean pe = true;  // ColosseumSpigot - Particle effect on/off switch.
+ 
+     public EntityWither(World world) {
+         super(world);
+@@ -76,6 +77,16 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
+         return "mob.wither.death";
+     }
+ 
++    // ColosseumSpigot start
++    public boolean pe() {
++        return this.pe;
++    }
++
++    public void pe(boolean pe) {
++        this.pe = pe;
++    }
++    // ColosseumSpigot end
++
+     public void m() {
+         this.motY *= 0.6000000238418579D;
+         double d0;
+@@ -147,6 +158,12 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
+             }
+         }
+ 
++        // ColosseumSpigot start
++        if (!this.pe()) {
++            return;
++        }
++        // ColosseumSpigot end
++
+         boolean flag = this.cm();
+ 
+         for (j = 0; j < 3; ++j) {
