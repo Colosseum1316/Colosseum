@@ -1,22 +1,23 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
-Date: Thu, 8 Jan 2026 21:23:57 +0800
+Date: Tue, 13 Jan 2026 19:28:31 +0800
 Subject: [PATCH] Configure Gradle
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..3b9119e7ca086f00def45a83d81136301e6913aa 100644
+index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..954d2af8cdc60ab9f9588a081b5bca985ece215e 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -1,6 +1,7 @@
+@@ -1,6 +1,8 @@
  plugins {
      id("pandaspigot.conventions")
      id("com.gradleup.shadow") version "9.0.0-beta7"
 +    `maven-publish`
++    id("io.typst.gradlesource.spigot")
  }
  
  val minecraftVersion = "1_8_R3"
-@@ -11,7 +12,7 @@ repositories {
+@@ -11,7 +13,7 @@ repositories {
  }
  
  dependencies {
@@ -25,25 +26,29 @@ index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..3b9119e7ca086f00def45a83d8113630
  
      // PandaSpigot start - Configuration
      implementation("com.hpfxd.configurate:configurate-eo-yaml:1.0.0") {
-@@ -53,7 +54,7 @@ dependencies {
- fun TaskContainer.registerRunTask(
-     name: String, block: JavaExec.() -> Unit
- ): TaskProvider<JavaExec> = register<JavaExec>(name) {
--    group = "pandaspigot"
-+    group = "colosseumspigot"
-     standardInput = System.`in`
-     workingDir = rootProject.layout.projectDirectory.dir(
-         providers.gradleProperty("runWorkDir").orElse("run")
-@@ -76,7 +77,7 @@ tasks {
-             "com.amihaiemil.eoyaml",
-             "org.spongepowered.configurate",
-             "io.leangen.geantyref",
--        ).forEach { relocate(it, "com.hpfxd.pandaspigot.libs.$it") }
-+        ).forEach { relocate(it, "colosseum.minecraft.colosseumspigot.libs.$it") }
-         // PandaSpigot end
+@@ -50,21 +52,6 @@ dependencies {
+     testImplementation("org.hamcrest:hamcrest-library:1.3")
+ }
  
-         val cbLibsPkg = "org.bukkit.craftbukkit.libs"
-@@ -103,14 +104,14 @@ tasks {
+-fun TaskContainer.registerRunTask(
+-    name: String, block: JavaExec.() -> Unit
+-): TaskProvider<JavaExec> = register<JavaExec>(name) {
+-    group = "pandaspigot"
+-    standardInput = System.`in`
+-    workingDir = rootProject.layout.projectDirectory.dir(
+-        providers.gradleProperty("runWorkDir").orElse("run")
+-    ).get().asFile
+-
+-    doFirst {
+-        workingDir.mkdirs()
+-    }
+-    block(this)
+-}
+-
+ tasks {
+     shadowJar {
+         mergeServiceFiles()
+@@ -103,14 +90,14 @@ tasks {
          archiveClassifier.set("original")
          manifest {
              val git = Git(rootProject.layout.projectDirectory)
@@ -61,7 +66,34 @@ index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..3b9119e7ca086f00def45a83d8113630
                  "Implementation-Vendor" to date,
                  "Specification-Title" to "Bukkit",
                  "Specification-Version" to project.version,
-@@ -151,3 +152,27 @@ tasks {
+@@ -122,24 +109,13 @@ tasks {
+         }
+     }
+ 
+-    registerRunTask("runShadow") {
+-        description = "Spin up a test server from the shadowJar archiveFile"
+-        classpath(shadowJar.flatMap { it.archiveFile })
+-    }
+-
+-    registerRunTask("runDev") {
+-        description = "Spin up a non-shaded non-relocated test server"
+-        classpath = java.sourceSets.main.get().runtimeClasspath
+-        mainClass.set("org.bukkit.craftbukkit.Main")
+-    }
+-
+-    register<RemapTask>("remap") {
++    register<io.typst.gradlesource.RemapTask>("remap") {
+         description = "Remap the output JAR file using the deprecation mappings"
+ 
+         val inTask = shadowJar.get()
+         inJarFile.set(inTask.archiveFile)
+         outJarFile.set(inTask.destinationDirectory.map { dir ->
+-            val archiveName = ArchiveName.archiveNameFromTask(inTask).copy(classifier = "")
++            val archiveName = io.typst.gradlesource.archiveNameFromTask(inTask).copy(classifier = "")
+             dir.file(archiveName.toFileName())
+         })
+ 
+@@ -151,3 +127,27 @@ tasks {
          dependsOn(named("remap"))
      }
  }

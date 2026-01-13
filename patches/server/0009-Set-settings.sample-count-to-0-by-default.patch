@@ -5,10 +5,10 @@ Subject: [PATCH] Set settings.sample-count to 0 by default
 
 
 diff --git a/src/main/java/net/minecraft/server/PacketStatusListener.java b/src/main/java/net/minecraft/server/PacketStatusListener.java
-index e4bff04ac4b817f92a6a2ab6ab4e7afa6e9576bd..a4826bed255c921860c6a3c8b6c9d4635337260e 100644
+index c348744ed6ccda981bb811fe9180426946d6e3b5..2a9b543d59c73acabd9d45b779d6d0057f0a9cb9 100644
 --- a/src/main/java/net/minecraft/server/PacketStatusListener.java
 +++ b/src/main/java/net/minecraft/server/PacketStatusListener.java
-@@ -108,11 +108,17 @@ public class PacketStatusListener implements PacketStatusInListener {
+@@ -110,11 +110,17 @@ public class PacketStatusListener implements PacketStatusInListener {
          }
  
          ServerPing.ServerPingPlayerSample playerSample = new ServerPing.ServerPingPlayerSample(event.getMaxPlayers(), profiles.size());

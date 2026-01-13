@@ -6,7 +6,8 @@ on:
       - master
     paths:
       - "!.idea"
-      - "build-logic"
+      - "buildSrc"
+      - "gradle-specialsource"
       - "Panda"
       - "patches/api/*.patch"
       - "patches/server/*.patch"
@@ -26,7 +27,8 @@ on:
       - master
     paths:
       - "!.idea"
-      - "build-logic"
+      - "buildSrc"
+      - "gradle-specialsource"
       - "Panda"
       - "patches/api/*.patch"
       - "patches/server/*.patch"
@@ -59,8 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # JDK 25 is temporarily dropped, because of Gradle.
-        java-version: [8, 11, 17, 21]
+        java-version: [17, 21, 25]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -85,10 +86,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global advice.detachedHead false
+          rm -rf run
+          rm -rf tmp
           ./colosseum.sh b
 
       - name: Publish package
-        if: ${{ github.ref_name == 'master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && matrix.java-version == '8' }}
+        if: ${{ github.ref_name == 'master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && matrix.java-version == '17' }}
         run: ./gradlew publish
         env:
           COLOSSEUM_MAVEN_URL: ${{ secrets.COLOSSEUM_MAVEN }}

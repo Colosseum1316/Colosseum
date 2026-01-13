@@ -10,3 +10,6 @@
 	path = SpecialSource2
 	url = https://github.com/Colosseum1316/SpecialSource-2.git
 	branch = master
+[submodule "gradle-specialsource"]
+	path = gradle-specialsource
+	url = https://github.com/Colosseum1316/gradle-specialsource.git

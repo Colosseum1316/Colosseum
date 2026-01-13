@@ -5,10 +5,10 @@ Subject: [PATCH] Configure Gradle
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 3802f6e3275dc62f39a1d17d1459d89902d1954b..f834c9145f9d42f91f7489f090f24d03afe791d6 100644
+index 6e727d855493daeae6a2d8e649fad95ea25db1ce..f336fed12ad1495b84a8041555bde896d17c002e 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -95,26 +95,6 @@ publishing {
+@@ -98,26 +98,6 @@ publishing {
              }
  
              pom {
@@ -35,7 +35,7 @@ index 3802f6e3275dc62f39a1d17d1459d89902d1954b..f834c9145f9d42f91f7489f090f24d03
                  licenses {
                      license {
                          name.set("GPL-v3.0")
-@@ -125,17 +105,17 @@ publishing {
+@@ -128,17 +108,17 @@ publishing {
          }
      }
  

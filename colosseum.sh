@@ -7,7 +7,7 @@
 PS1="$"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-alias git="git -c commit.gpgsign=false -c core.safecrlf=false -c advice.detachedHead=false"
+alias git="git -c commit.gpgsign=false -c core.safecrlf=false"
 
 # OS X & FreeBSD don't have md5sum, just md5 -r
 command -v md5sum >/dev/null 2>&1 || {
@@ -48,7 +48,7 @@ function colosseum_dirs_full_reset {
 
   cd ${SCRIPT_DIR}
   rm -rf "${SCRIPT_DIR}/tmp"
-  git submodule update --init -- SpecialSource SpecialSource2 Panda
+  git submodule update --init -- SpecialSource SpecialSource2 Panda gradle-specialsource
 
   set +x
 }
@@ -84,9 +84,9 @@ minecraft_server_jar_hash=$(cat "${SCRIPT_DIR}/Panda/base/Paper/BuildData/info.j
 
 decompilation_mcdev_dir="${SCRIPT_DIR}/mc-dev"
 decompilation_spigot_dir="${decompilation_mcdev_dir}/spigot"
+decompilation_panda_dir="${decompilation_mcdev_dir}/panda"
 decompilation_classes_dir="${decompilation_mcdev_dir}/classes"
-_nms="net/minecraft/server"
-decompilation_nms="${decompilation_spigot_dir}/${_nms}"
+decompilation_nms="${decompilation_spigot_dir}/net/minecraft/server"
 wget_dir="${SCRIPT_DIR}/tmp"
 
 decompilation_server_jar="${decompilation_mcdev_dir}/${minecraft_version}.jar"
@@ -103,6 +103,7 @@ set -x
 mkdir -p "${wget_dir}" || true
 mkdir -p "${decompilation_mcdev_dir}" || true
 mkdir -p "${decompilation_spigot_dir}" || true
+mkdir -p "${decompilation_panda_dir}" || true
 set +x
 
 if [[ ! -f "${wget_dir}/server.jar" ]]; then
@@ -251,21 +252,19 @@ function colosseum_minecraft_apply_patch {
   unset ${WORKING_DIR}
   cd ${SCRIPT_DIR}
 
-  echo "Importing MC Dev"
+  echo "Importing mc-dev"
 
-  find "${decompilation_nms}" -type f -name "*.java" | while read file; do
+  find "${decompilation_panda_dir}/net/minecraft/server" -type f -name "*.java" | while read file; do
     local filename="$(basename "$file")"
-    local target="${SCRIPT_DIR}/Panda/base/Paper/PaperSpigot-Server/src/main/java/${_nms}/${filename}"
+    local target="${SCRIPT_DIR}/Panda/base/Paper/PaperSpigot-Server/src/main/java/net/minecraft/server/${filename}"
 
-    set -x
     if [[ ! -f "${target}" ]]; then
       cp "$file" "$target"
     fi
-    set +x
   done
 
   set -x
-  cp -rt "${SCRIPT_DIR}/Panda/base/Paper/PaperSpigot-Server/src/main/resources" "${decompilation_spigot_dir}/assets" "${decompilation_spigot_dir}/yggdrasil_session_pubkey.der"
+  cp -rt "${SCRIPT_DIR}/Panda/base/Paper/PaperSpigot-Server/src/main/resources" "${decompilation_panda_dir}/assets" "${decompilation_panda_dir}/yggdrasil_session_pubkey.der"
   cd "${SCRIPT_DIR}/Panda/base/Paper/PaperSpigot-Server"
   if [[ "$(git log -1 --oneline)" = *"mc-dev Imports"* ]]; then
     git reset --hard HEAD^
@@ -314,7 +313,9 @@ function _prepare_specialsource {
   cd "${SCRIPT_DIR}/SpecialSource2"
   git reset --hard ${SPECIALSOURCE2_GIT_REF}
   git clean -fd
+  set -e
   patch _specialsource_2_decompile.sh < "${SCRIPT_DIR}/patches/SpecialSource2/_specialsource_2_decompile.sh.patch"
+  set +e
   ./build.sh
   rm -rf "${wget_dir}/SpecialSource-2.jar"
   cp "ss2/target/SpecialSource-2.jar" "${wget_dir}/SpecialSource-2.jar"
@@ -328,10 +329,25 @@ function _decompile_nms {
     echo "Extracting NMS classes"
     mkdir -p "${decompilation_classes_dir}" || true
     cd "${decompilation_classes_dir}"
-    if ! jar xf "${decompilation_server_jar_mapped}" "${_nms}" yggdrasil_session_pubkey.der assets; then
+    if ! jar xf "${decompilation_server_jar_mapped}" "net/minecraft/server" yggdrasil_session_pubkey.der assets; then
       echo "Failed to extract NMS classes!!!"
       exit 1
     fi
+  fi
+
+  cd ${SCRIPT_DIR}
+
+  if [ ! -d "${decompilation_panda_dir}/net/minecraft/server" ]; then
+    echo "Decompiling NMS classes"
+    java -version
+    set -x
+    if ! java -jar "${SCRIPT_DIR}/Panda/bin/fernflower.jar" -dgs=1 -hdc=0 -asc=1 -udv=0 -aoa=1 "${decompilation_classes_dir}" "${decompilation_panda_dir}"; then
+      rm -rf "${decompilation_panda_dir}/net"
+      echo "Failed to decompile NMS classes!!!"
+      set +x
+      exit 1
+    fi
+    set +x
   fi
 
   if [[ -d "${decompilation_nms}" ]]; then
@@ -351,7 +367,7 @@ function _decompile_nms {
     set +x
   fi
 
-  local _craftbukkit="src/main/java/${_nms}"
+  local _craftbukkit="src/main/java/net/minecraft/server"
 
   echo "Applying CraftBukkit patches to NMS"
 
@@ -448,7 +464,7 @@ case "$1" in
   echo "(_d)ecompile" ;
   echo "(_a)pply_patch" ;
   echo "(r)eset" ;
-  echo "(r)ebuild_(p)atch" ;
+  echo "rebuild_(p)atch" ;
   echo "(f)ull_(r)eset" ;
   echo "(i)nit" ;
   exit 1 ;
