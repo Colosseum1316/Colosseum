@@ -878,7 +878,7 @@ index 8a302b2678916f862cac0c020fa3247043204e6a..ea642606804c40b43bc447f295617b7c
          this.l.add(new ServerCommand(s, icommandlistener));
      }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 0f3e614233a2c10ceae6164faef612671729214e..888a490831429c377802d029fa9c1719ea8af36a 100644
+index 29113cca588e917c33230535619a9ed5f5047ba7..2796c70577ea592ea088228219d124080d3361c9 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1422,8 +1422,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
@@ -894,10 +894,10 @@ index 0f3e614233a2c10ceae6164faef612671729214e..888a490831429c377802d029fa9c1719
  
      public abstract boolean ae();
 diff --git a/src/main/java/net/minecraft/server/MojangStatisticsGenerator.java b/src/main/java/net/minecraft/server/MojangStatisticsGenerator.java
-index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e584f57722 100644
+index c9e1b5cb3b7c10fffd408a6c11d4f712075c0219..a08d5befce0f849b8843d5b5a6dafedfdd421fff 100644
 --- a/src/main/java/net/minecraft/server/MojangStatisticsGenerator.java
 +++ b/src/main/java/net/minecraft/server/MojangStatisticsGenerator.java
-@@ -13,8 +13,9 @@ import java.util.Timer;
+@@ -12,8 +12,9 @@ import java.util.Timer;
  import java.util.TimerTask;
  import java.util.UUID;
  
@@ -908,7 +908,7 @@ index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e5
      private final Map<String, Object> a = Maps.newHashMap();
      private final Map<String, Object> b = Maps.newHashMap();
      private final String c = UUID.randomUUID().toString();
-@@ -25,8 +26,9 @@ public class MojangStatisticsGenerator {
+@@ -24,8 +25,9 @@ public class MojangStatisticsGenerator {
      private final long h;
      private boolean i;
      private int j;
@@ -919,7 +919,7 @@ index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e5
          try {
              this.d = new URL("http://snoop.minecraft.net/" + s + "?version=" + 2);
          } catch (MalformedURLException malformedurlexception) {
-@@ -35,9 +37,11 @@ public class MojangStatisticsGenerator {
+@@ -34,9 +36,11 @@ public class MojangStatisticsGenerator {
  
          this.e = imojangstatistics;
          this.h = i;
@@ -931,13 +931,7 @@ index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e5
          if (!this.i) {
              this.i = true;
              this.h();
-@@ -56,14 +60,16 @@ public class MojangStatisticsGenerator {
-                             hashmap.put("snooper_token", MojangStatisticsGenerator.this.c);
-                         }
- 
--                        HttpUtilities.a(MojangStatisticsGenerator.this.d, (Map) hashmap, true);
-+//                        HttpUtilities.a(MojangStatisticsGenerator.this.d, (Map) hashmap, true);
-                     }
+@@ -60,9 +64,11 @@ public class MojangStatisticsGenerator {
                  }
              }, 0L, 900000L);
          }
@@ -949,7 +943,7 @@ index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e5
          this.i();
          this.a("snooper_token", this.c);
          this.b("snooper_token", this.c);
-@@ -73,9 +79,11 @@ public class MojangStatisticsGenerator {
+@@ -72,9 +78,11 @@ public class MojangStatisticsGenerator {
          this.b("java_version", System.getProperty("java.version"));
          this.a("version", "1.8.8");
          this.e.b(this);
@@ -959,29 +953,27 @@ index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e5
      private void i() {
 +        /*
          RuntimeMXBean runtimemxbean = ManagementFactory.getRuntimeMXBean();
-         List list = runtimemxbean.getInputArguments();
+         List<String> list = runtimemxbean.getInputArguments();
          int i = 0;
-@@ -90,45 +98,55 @@ public class MojangStatisticsGenerator {
+@@ -86,37 +94,46 @@ public class MojangStatisticsGenerator {
          }
  
-         this.a("jvm_args", Integer.valueOf(i));
-+         */
+         this.a("jvm_args", i);
++        */
      }
  
      public void b() {
 +        /*
-         this.b("memory_total", Long.valueOf(Runtime.getRuntime().totalMemory()));
-         this.b("memory_max", Long.valueOf(Runtime.getRuntime().maxMemory()));
-         this.b("memory_free", Long.valueOf(Runtime.getRuntime().freeMemory()));
-         this.b("cpu_cores", Integer.valueOf(Runtime.getRuntime().availableProcessors()));
+         this.b("memory_total", Runtime.getRuntime().totalMemory());
+         this.b("memory_max", Runtime.getRuntime().maxMemory());
+         this.b("memory_free", Runtime.getRuntime().freeMemory());
+         this.b("cpu_cores", Runtime.getRuntime().availableProcessors());
          this.e.a(this);
 +         */
      }
  
      public void a(String s, Object object) {
 +        /*
-         Object object1 = this.g;
- 
          synchronized (this.g) {
              this.b.put(s, object);
          }
@@ -990,8 +982,6 @@ index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e5
  
      public void b(String s, Object object) {
 +        /*
-         Object object1 = this.g;
- 
          synchronized (this.g) {
              this.a.put(s, object);
          }
@@ -1011,14 +1001,8 @@ index 076306d9ea6c6246dd6ded8090aac2d224951b93..e5210f9292d1dfe8936bc6cb8cb6f3e5
  
      public long g() {
 -        return this.h;
-+        return Long.MAX_VALUE;
 +//        return this.h;
-     }
- 
-     static int f(MojangStatisticsGenerator mojangstatisticsgenerator) {
--        return mojangstatisticsgenerator.j++;
-+        return 0;
-+//        return mojangstatisticsgenerator.j++;
++        return Long.MAX_VALUE;
      }
  }
 diff --git a/src/main/java/org/spigotmc/Metrics.java b/src/main/java/org/spigotmc/Metrics.java

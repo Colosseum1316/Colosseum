@@ -6,7 +6,9 @@
 
 ## Prerequisites
 
-- Gradle 8
+- JDK 17
+- Gradle 9
+- Maven 3
 
 ## Usage
 

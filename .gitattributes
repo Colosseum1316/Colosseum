@@ -1,5 +1,8 @@
-gradlew.bat linguist-generated
-gradlew linguist-generated
+*.sh text eol=lf
+gradlew.bat text eol=crlf linguist-generated
+gradlew text eol=lf linguist-generated
 gradle/wrapper/** linguist-generated
 patches/api/** linguist-generated
 patches/server/** linguist-generated
+patches/SpecialSource/** linguist-generated
+patches/SpecialSource2/** linguist-generated

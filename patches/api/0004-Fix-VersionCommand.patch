@@ -1,0 +1,235 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Tue, 13 Jan 2026 22:12:37 +0800
+Subject: [PATCH] Fix VersionCommand
+
+
+diff --git a/src/main/java/org/bukkit/command/defaults/VersionCommand.java b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
+index 04195613b2c230aa5e28fb2fabc2b3f2b32ec169..e9e2c879a88a4f4969dafbadd6363a6e6791af11 100644
+--- a/src/main/java/org/bukkit/command/defaults/VersionCommand.java
++++ b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
+@@ -49,7 +49,6 @@ public class VersionCommand extends BukkitCommand {
+ 
+         if (args.length == 0) {
+             sender.sendMessage(Bukkit.getVersionMessage()); // PandaSpigot - Use Bukkit.getVersionMessage
+-            sendVersion(sender);
+         } else {
+             StringBuilder name = new StringBuilder();
+ 
+@@ -146,216 +145,4 @@ public class VersionCommand extends BukkitCommand {
+         }
+         return ImmutableList.of();
+     }
+-
+-    private final ReentrantLock versionLock = new ReentrantLock();
+-    private boolean hasVersion = false;
+-    private String versionMessage = null;
+-    private final Set<CommandSender> versionWaiters = new HashSet<CommandSender>();
+-    private boolean versionTaskStarted = false;
+-    private long lastCheck = 0;
+-
+-    private void sendVersion(CommandSender sender) {
+-        if (hasVersion) {
+-            if (System.currentTimeMillis() - lastCheck > 21600000) {
+-                lastCheck = System.currentTimeMillis();
+-                hasVersion = false;
+-            } else {
+-                sender.sendMessage(versionMessage);
+-                return;
+-            }
+-        }
+-        versionLock.lock();
+-        try {
+-            if (hasVersion) {
+-                sender.sendMessage(versionMessage);
+-                return;
+-            }
+-            versionWaiters.add(sender);
+-            sender.sendMessage("Checking version, please wait...");
+-            if (!versionTaskStarted) {
+-                versionTaskStarted = true;
+-                new Thread(new Runnable() {
+-
+-                    @Override
+-                    public void run() {
+-                        obtainVersion();
+-                    }
+-                }).start();
+-            }
+-        } finally {
+-            versionLock.unlock();
+-        }
+-    }
+-
+-    private void obtainVersion() {
+-        String version = Bukkit.getVersion();
+-        if (version == null) version = "Custom";
+-        // PandaSpigot start
+-        if (version.startsWith("git-PandaSpigot-")) {
+-            String[] parts = version.substring("git-PandaSpigot-".length()).split("[-\\s]");
+-            int distance;
+-            try {
+-                distance = fetchDownloadApiDistance(Integer.parseInt(parts[0]));
+-            } catch (NumberFormatException e) {
+-                distance = fetchGitDistance("hpfxd/PandaSpigot", "master", parts[0]);
+-            }
+-
+-            switch (distance) {
+-                case -1:
+-                    this.setVersionMessage(ChatColor.YELLOW + "Error obtaining version information");
+-                    break;
+-                case 0:
+-                    this.setVersionMessage(ChatColor.GREEN + "You are running the latest version");
+-                    break;
+-                case -2:
+-                    this.setVersionMessage(ChatColor.YELLOW + "Unknown version");
+-                    break;
+-                default:
+-                    this.setVersionMessage(ChatColor.RED + "You are " + distance + " version(s) behind!\n" + ChatColor.RED + "Download the new version at " + ChatColor.GOLD + "https://github.com/hpfxd/PandaSpigot");
+-                    break;
+-            }
+-        // PaperSpigot start
+-        } else if (version.startsWith("git-PaperSpigot-")) {
+-        // PandaSpigot end
+-            String[] parts = version.substring("git-PaperSpigot-".length()).split("[-\\s]");
+-            int paperSpigotVersions = getDistance("paperspigot", parts[0]);
+-            if (paperSpigotVersions == -1) {
+-                setVersionMessage("Error obtaining version information");
+-            } else {
+-                if (paperSpigotVersions == 0) {
+-                    setVersionMessage("You are running the latest version");
+-                } else {
+-                    setVersionMessage("You are " + paperSpigotVersions + " version(s) behind");
+-                }
+-            }
+-        } else if (version.startsWith("git-Spigot-")) {
+-        // PaperSpigot end
+-            String[] parts = version.substring("git-Spigot-".length()).split("-");
+-            int cbVersions = getDistance("craftbukkit", parts[1].substring(0, parts[1].indexOf(' ')));
+-            int spigotVersions = getDistance("spigot", parts[0]);
+-            if (cbVersions == -1 || spigotVersions == -1) {
+-                setVersionMessage("Error obtaining version information");
+-            } else {
+-                if (cbVersions == 0 && spigotVersions == 0) {
+-                    setVersionMessage("You are running the latest version");
+-                } else {
+-                    setVersionMessage("You are " + (cbVersions + spigotVersions) + " version(s) behind");
+-                }
+-            }
+-
+-        } else if (version.startsWith("git-Bukkit-")) {
+-            version = version.substring("git-Bukkit-".length());
+-            int cbVersions = getDistance("craftbukkit", version.substring(0, version.indexOf(' ')));
+-            if (cbVersions == -1) {
+-                setVersionMessage("Error obtaining version information");
+-            } else {
+-                if (cbVersions == 0) {
+-                    setVersionMessage("You are running the latest version");
+-                } else {
+-                    setVersionMessage("You are " + cbVersions + " version(s) behind");
+-                }
+-            }
+-        } else {
+-            setVersionMessage("Unknown version, custom build?");
+-        }
+-    }
+-
+-    private void setVersionMessage(String msg) {
+-        lastCheck = System.currentTimeMillis();
+-        versionMessage = msg;
+-        versionLock.lock();
+-        try {
+-            hasVersion = true;
+-            versionTaskStarted = false;
+-            for (CommandSender sender : versionWaiters) {
+-                sender.sendMessage(versionMessage);
+-            }
+-            versionWaiters.clear();
+-        } finally {
+-            versionLock.unlock();
+-        }
+-    }
+-
+-    // PandaSpigot start
+-    private static int fetchDownloadApiDistance(int runNumber) {
+-        try {
+-            HttpURLConnection connection = (HttpURLConnection) new URL("https://downloads.hpfxd.com/v2/projects/pandaspigot/versions/1.8.8").openConnection();
+-            connection.setRequestProperty("Accept", "application/json");
+-            connection.setRequestProperty("User-Agent", "PandaSpigot/" + Bukkit.getVersion());
+-            connection.connect();
+-            if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) return -2;
+-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
+-                JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
+-                JsonArray arr = obj.getAsJsonArray("builds");
+-                int latest = StreamSupport.stream(arr.spliterator(), false)
+-                    .mapToInt(JsonElement::getAsInt)
+-                    .max()
+-                    .orElse(-1);
+-                if (latest < 0) {
+-                    return -1;
+-                } else {
+-                    return latest - runNumber;
+-                }
+-            } catch (JsonSyntaxException | NumberFormatException e) {
+-                e.printStackTrace();
+-                return -1;
+-            }
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-            return -1;
+-        }
+-    }
+-    private static int fetchGitDistance(String repo, String branch, String hash) {
+-        hash = hash.replace("\"", "");
+-        try {
+-            HttpURLConnection connection = (HttpURLConnection) new URL("https://api.github.com/repos/" + repo + "/compare/" + branch + "..." + hash).openConnection();
+-            connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
+-            connection.setRequestProperty("User-Agent", "PandaSpigot/" + Bukkit.getVersion());
+-            connection.connect();
+-            if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) return -2; // Unknown commit
+-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
+-                JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
+-                String status = obj.get("status").getAsString();
+-                switch (status) {
+-                    case "identical":
+-                        return 0;
+-                    case "behind":
+-                        return obj.get("behind_by").getAsInt();
+-                    default:
+-                        return -1;
+-                }
+-            } catch (JsonSyntaxException | NumberFormatException e) {
+-                e.printStackTrace();
+-                return -1;
+-            }
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-            return -1;
+-        }
+-    }
+-    // PandaSpigot end
+-
+-    private static int getDistance(String repo, String currentVerInt) { // PaperSpigot
+-        try {
+-            BufferedReader reader = Resources.asCharSource(
+-                    new URL("https://ci.destroystokyo.com/job/PaperSpigot/lastSuccessfulBuild/buildNumber"), // PaperSpigot
+-                    Charsets.UTF_8
+-            ).openBufferedStream();
+-            try {
+-                // PaperSpigot start
+-                int newVer = Integer.decode(reader.readLine());
+-                int currentVer = Integer.decode(currentVerInt);
+-                return newVer - currentVer;
+-            } catch (NumberFormatException ex) {
+-                //ex.printStackTrace();
+-                // PaperSpigot end
+-                return -1;
+-            } finally {
+-                reader.close();
+-            }
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-            return -1;
+-        }
+-    }
+ }

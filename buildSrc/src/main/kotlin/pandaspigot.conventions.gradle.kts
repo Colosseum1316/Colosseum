@@ -22,16 +22,4 @@ tasks {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    val prepareTestServerDir by registering {
-        doLast {
-            mkdir(layout.buildDirectory.dir("test-server").get().asFile)
-        }
-    }
-
-    test {
-        workingDir = layout.buildDirectory.dir("test-server").get().asFile
-
-        dependsOn(prepareTestServerDir)
-    }
 }
