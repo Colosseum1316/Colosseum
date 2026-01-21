@@ -1,5 +1,5 @@
---- _specialsource_2_decompile.sh	2026-01-13 20:19:11.498954873 +0800
-+++ _specialsource_2_decompile.sh	2026-01-13 21:59:10.928531829 +0800
+--- _specialsource_2_decompile.sh	2026-01-20 20:39:52.725266880 +0800
++++ _specialsource_2_decompile.sh	2026-01-20 20:42:59.309921194 +0800
 @@ -4,7 +4,7 @@
  BASE_DIR="$1"
  WORKING_DIR="$1"
@@ -9,7 +9,7 @@
  decompilation_dir="${wget_dir}/dec"
  mkdir -p "${decompilation_dir}" || true
  output_dir="${WORKING_DIR}/ss2/src"
-@@ -33,24 +33,24 @@
+@@ -44,24 +44,24 @@
    fi
  }
  
@@ -24,7 +24,7 @@
  
  cd "${decompilation_dir}"
 -cp "${wget_dir}/SpecialSource-2.jar" .
--jar xvf SpecialSource-2.jar
+-jar xf SpecialSource-2.jar
 -rm -rf SpecialSource-2.jar
 +cp "${wget_dir}/SpecialSource-2-Panda.jar" .
 +jar xf SpecialSource-2-Panda.jar
