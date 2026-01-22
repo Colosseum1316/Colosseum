@@ -57,12 +57,13 @@ defaults:
 
 jobs:
   build:
-    name: Build jar on Java ${{ matrix.java-version }}
+    name: Build jar on Java ${{ matrix.java-version }} (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
         java-version: [17, 21, 25]
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -91,7 +92,7 @@ jobs:
           ./colosseum.sh b
 
       - name: Publish package
-        if: ${{ github.ref_name == 'master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && matrix.java-version == '17' }}
+        if: ${{ github.ref_name == 'master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && matrix.java-version == '17' && matrix.os == 'ubuntu-latest' }}
         run: ./gradlew publish
         env:
           COLOSSEUM_MAVEN_URL: ${{ secrets.COLOSSEUM_MAVEN }}
@@ -101,7 +102,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
-          name: ColosseumSpigot-API-${{ github.run_id }}-java-${{ matrix.java-version }}
+          name: ColosseumSpigot-API ${{ github.run_id }} java${{ matrix.java-version }} ${{ matrix.os }}
           path: ./ColosseumSpigot-API/build/libs/*.jar
           retention-days: 1
           overwrite: true
@@ -110,7 +111,7 @@ jobs:
         uses: actions/upload-artifact@v6
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
         with:
-          name: ColosseumSpigot-${{ github.run_id }}-java-${{ matrix.java-version }}
+          name: ColosseumSpigot ${{ github.run_id }} java${{ matrix.java-version }} ${{ matrix.os }}
           path: ./ColosseumSpigot-Server/build/libs/*.jar
           retention-days: 1
           overwrite: true

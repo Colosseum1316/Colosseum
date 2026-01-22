@@ -5,13 +5,13 @@ Subject: [PATCH] Configure Gradle
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..954d2af8cdc60ab9f9588a081b5bca985ece215e 100644
+index 25fde60e840c9a254b8944abab9b92066f7076c3..345d4119fb682dadabf032317d371583cd637e50 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -1,6 +1,8 @@
  plugins {
      id("pandaspigot.conventions")
-     id("com.gradleup.shadow") version "9.0.0-beta7"
+     id("com.gradleup.shadow") version "9.3.1"
 +    `maven-publish`
 +    id("io.typst.gradlesource.spigot")
  }
@@ -47,8 +47,8 @@ index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..954d2af8cdc60ab9f9588a081b5bca98
 -
  tasks {
      shadowJar {
-         mergeServiceFiles()
-@@ -103,14 +90,14 @@ tasks {
+         archiveClassifier.set("unmapped")
+@@ -108,14 +95,14 @@ tasks {
          archiveClassifier.set("original")
          manifest {
              val git = Git(rootProject.layout.projectDirectory)
@@ -66,7 +66,7 @@ index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..954d2af8cdc60ab9f9588a081b5bca98
                  "Implementation-Vendor" to date,
                  "Specification-Title" to "Bukkit",
                  "Specification-Version" to project.version,
-@@ -122,24 +109,13 @@ tasks {
+@@ -128,24 +115,13 @@ tasks {
          }
      }
  
@@ -93,7 +93,7 @@ index 8c8aa2274fd97c9d3a2f24700f58e045e984f75d..954d2af8cdc60ab9f9588a081b5bca98
              dir.file(archiveName.toFileName())
          })
  
-@@ -151,3 +127,27 @@ tasks {
+@@ -157,3 +133,27 @@ tasks {
          dependsOn(named("remap"))
      }
  }

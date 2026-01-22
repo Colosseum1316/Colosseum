@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: NorthRealm <155140859+NorthRealm@users.noreply.github.com>
+Date: Tue, 20 Jan 2026 21:55:41 +0800
+Subject: [PATCH] Javadoc URL
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index f336fed12ad1495b84a8041555bde896d17c002e..f2bbbddbcaddcecf5829dc58a0d41ac07295d510 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -71,10 +71,10 @@ tasks {
+ 
+             it.links(
+                 "https://guava.dev/releases/17.0/api/docs/",
+-                "https://javadoc.io/doc/org.yaml/snakeyaml/1.15/",
+-                "https://javadoc.io/doc/com.google.code.gson/gson/2.2.4/",
++                "https://coffeewarehouse.harborbucket.top/docs/javadoc/released/org.yaml/snakeyaml/1.15/",
++                "https://coffeewarehouse.harborbucket.top/docs/javadoc/released/com.google.code.gson/gson/2.2.4/",
+                 "https://repo.hpfxd.com/javadoc/releases/net/md-5/bungeecord-chat/1.8-SNAPSHOT/raw/",
+-                "https://javadoc.io/doc/org.slf4j/slf4j-api/1.7.35/", // PandaSpigot - Add SLF4J Logger
++                "https://coffeewarehouse.harborbucket.top/docs/javadoc/released/org.slf4j/slf4j-api/1.7.35/", // ColosseumSpigot - Javadoc URL  // PandaSpigot - Add SLF4J Logger
+                 // PandaSpigot start - Adventure
+                 "https://jd.advntr.dev/api/$adventureVersion/",
+                 "https://jd.advntr.dev/text-minimessage/$adventureVersion/",
